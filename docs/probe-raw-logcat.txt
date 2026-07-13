@@ -1,0 +1,312 @@
+﻿--------- beginning of main
+--------- beginning of system
+04-22 02:50:09.833  5269  5269 I CZPROBE : 
+04-22 02:50:09.834  5269  5269 I CZPROBE : ===== BUILD =====
+04-22 02:50:09.834  5269  5269 I CZPROBE : SDK_INT        28
+04-22 02:50:09.834  5269  5269 I CZPROBE : RELEASE        9
+04-22 02:50:09.835  5269  5269 I CZPROBE : SECURITY_PATCH 2022-03-01
+04-22 02:50:09.835  5269  5269 I CZPROBE : INCREMENTAL    8611427
+04-22 02:50:09.836  5269  5269 I CZPROBE : MANUFACTURER   Fossil
+04-22 02:50:09.836  5269  5269 I CZPROBE : BRAND          fossil
+04-22 02:50:09.836  5269  5269 I CZPROBE : MODEL          CZ Smart
+04-22 02:50:09.837  5269  5269 I CZPROBE : DEVICE         triggerfish
+04-22 02:50:09.837  5269  5269 I CZPROBE : PRODUCT        triggerfish
+04-22 02:50:09.837  5269  5269 I CZPROBE : HARDWARE       triggerfish
+04-22 02:50:09.838  5269  5269 I CZPROBE : BOARD          triggerfish
+04-22 02:50:09.838  5269  5269 I CZPROBE : FINGERPRINT    fossil/triggerfish/triggerfish:9/PXE2.201012.042/8611427:user/release-keys
+04-22 02:50:09.838  5269  5269 I CZPROBE : 
+04-22 02:50:09.839  5269  5269 I CZPROBE : ===== WEAR OS =====
+04-22 02:50:09.888  5269  5269 I CZPROBE : Wear OS by Google = 2.66.107.597555387
+04-22 02:50:09.892  5269  5269 I CZPROBE : Play services = 25.14.34 (050300-748828228)
+04-22 02:50:09.895  5269  5269 I CZPROBE : Wear settings = 9
+04-22 02:50:09.895  5269  5269 I CZPROBE : 
+04-22 02:50:09.896  5269  5269 I CZPROBE : ===== FEATURES =====
+04-22 02:50:09.898  5269  5269 I CZPROBE : YES  android.hardware.type.watch
+04-22 02:50:09.899  5269  5269 I CZPROBE :  no  android.hardware.nfc
+04-22 02:50:09.900  5269  5269 I CZPROBE : YES  android.hardware.location.gps
+04-22 02:50:09.902  5269  5269 I CZPROBE : YES  android.hardware.microphone
+04-22 02:50:09.904  5269  5269 I CZPROBE : YES  android.hardware.bluetooth_le
+04-22 02:50:09.905  5269  5269 I CZPROBE : YES  android.hardware.wifi
+04-22 02:50:09.907  5269  5269 I CZPROBE : YES  android.hardware.sensor.heartrate
+04-22 02:50:09.908  5269  5269 I CZPROBE : YES  android.hardware.sensor.barometer
+04-22 02:50:09.910  5269  5269 I CZPROBE : YES  android.hardware.sensor.stepcounter
+04-22 02:50:09.911  5269  5269 I CZPROBE :  no  android.hardware.telephony
+04-22 02:50:09.912  5269  5269 I CZPROBE : 
+04-22 02:50:09.912  5269  5269 I CZPROBE : ===== DISPLAY =====
+04-22 02:50:09.913  5269  5269 I CZPROBE : round          true
+04-22 02:50:09.913  5269  5269 I CZPROBE : pixels         416 x 416
+04-22 02:50:09.913  5269  5269 I CZPROBE : dp             208 x 208
+04-22 02:50:09.914  5269  5269 I CZPROBE : density        2.0  (320 dpi)
+04-22 02:50:09.915  5269  5269 I CZPROBE : scrollFactor   128.0
+04-22 02:50:09.915  5269  5269 I CZPROBE : 
+04-22 02:50:09.915  5269  5269 I CZPROBE : ===== MEMORY =====
+04-22 02:50:09.918  5269  5269 I CZPROBE : memoryClass    96 MB
+04-22 02:50:09.918  5269  5269 I CZPROBE : largeMemClass  128 MB
+04-22 02:50:09.919  5269  5269 I CZPROBE : totalMem       948 MB
+04-22 02:50:09.919  5269  5269 I CZPROBE : availMem       507 MB
+04-22 02:50:09.920  5269  5269 I CZPROBE : lowRamDevice   true
+04-22 02:50:09.920  5269  5269 I CZPROBE : 
+04-22 02:50:09.920  5269  5269 I CZPROBE : ===== INPUT DEVICES =====
+04-22 02:50:09.926  5269  5269 I CZPROBE : [-1] Virtual
+04-22 02:50:09.927  5269  5269 I CZPROBE :      sources=0x301  ROTARY=false
+04-22 02:50:09.928  5269  5269 I CZPROBE : [1] qpnp_pon
+04-22 02:50:09.929  5269  5269 I CZPROBE :      sources=0x101  ROTARY=false
+04-22 02:50:09.931  5269  5269 I CZPROBE : [2] bg-spi
+04-22 02:50:09.932  5269  5269 I CZPROBE :      sources=0x400101  ROTARY=true
+04-22 02:50:09.935  5269  5269 I CZPROBE : [3] raydium_ts
+04-22 02:50:09.936  5269  5269 I CZPROBE :      sources=0x1103  ROTARY=false
+04-22 02:50:09.938  5269  5269 I CZPROBE : [4] gpio-keys
+04-22 02:50:09.938  5269  5269 I CZPROBE :      sources=0x101  ROTARY=false
+04-22 02:50:09.940  5269  5269 I CZPROBE : [5] qti-haptics
+04-22 02:50:09.941  5269  5269 I CZPROBE :      sources=0x0  ROTARY=false
+04-22 02:50:09.941  5269  5269 I CZPROBE : 
+04-22 02:50:09.942  5269  5269 I CZPROBE : ===== SENSORS =====
+04-22 02:50:09.987  5269  5269 I CZPROBE : type=26 wrist_tilt_gesture  Wakeup
+04-22 02:50:09.988  5269  5269 I CZPROBE :      vendor=qualcomm max=1.0 power=0.001mA
+04-22 02:50:09.989  5269  5269 I CZPROBE : type=18 Pedometer  Wakeup
+04-22 02:50:09.989  5269  5269 I CZPROBE :      vendor=Fossil max=1.0 power=0.001mA
+04-22 02:50:09.990  5269  5269 I CZPROBE : type=18 Pedometer  Non-wakeup
+04-22 02:50:09.990  5269  5269 I CZPROBE :      vendor=Fossil max=1.0 power=0.001mA
+04-22 02:50:09.991  5269  5269 I CZPROBE : type=19 Pedometer  Wakeup
+04-22 02:50:09.991  5269  5269 I CZPROBE :      vendor=Fossil max=4.2949673E9 power=0.001mA
+04-22 02:50:09.992  5269  5269 I CZPROBE : type=19 Pedometer  Non-wakeup
+04-22 02:50:09.993  5269  5269 I CZPROBE :      vendor=Fossil max=4.2949673E9 power=0.001mA
+04-22 02:50:09.993  5269  5269 I CZPROBE : type=29 stationary_detect_wakeup
+04-22 02:50:09.994  5269  5269 I CZPROBE :      vendor=qualcomm max=1.0 power=0.025mA
+04-22 02:50:09.994  5269  5269 I CZPROBE : type=29 stationary_detect
+04-22 02:50:09.995  5269  5269 I CZPROBE :      vendor=qualcomm max=1.0 power=0.025mA
+04-22 02:50:09.995  5269  5269 I CZPROBE : type=11 Rotation Vector  Wakeup
+04-22 02:50:09.996  5269  5269 I CZPROBE :      vendor=qualcomm max=1.0 power=1.415mA
+04-22 02:50:09.997  5269  5269 I CZPROBE : type=11 Rotation Vector  Non-wakeup
+04-22 02:50:09.998  5269  5269 I CZPROBE :      vendor=qualcomm max=1.0 power=1.415mA
+04-22 02:50:09.998  5269  5269 I CZPROBE : type=6 icp101xx Pressure Sensor Wakeup
+04-22 02:50:09.999  5269  5269 I CZPROBE :      vendor=TDK-Invensense max=1150.0 power=0.01mA
+04-22 02:50:09.999  5269  5269 I CZPROBE : type=6 icp101xx Pressure Sensor Non-wakeup
+04-22 02:50:10.000  5269  5269 I CZPROBE :      vendor=TDK-Invensense max=1150.0 power=0.01mA
+04-22 02:50:10.001  5269  5269 I CZPROBE : type=65572 pah8131_ppg PPG Sensor Wakeup
+04-22 02:50:10.002  5269  5269 I CZPROBE :      vendor=pixart max=8.0E8 power=0.15mA
+04-22 02:50:10.002  5269  5269 I CZPROBE : type=65572 pah8131_ppg PPG Sensor Non-wakeup
+04-22 02:50:10.003  5269  5269 I CZPROBE :      vendor=pixart max=8.0E8 power=0.15mA
+04-22 02:50:10.003  5269  5269 I CZPROBE : type=34 pah8011_offbody_detect  Wakeup
+04-22 02:50:10.004  5269  5269 I CZPROBE :      vendor=pixart max=1.0 power=0.015mA
+04-22 02:50:10.005  5269  5269 I CZPROBE : type=34 pah8011_offbody_detect  Non-wakeup
+04-22 02:50:10.005  5269  5269 I CZPROBE :      vendor=pixart max=1.0 power=0.015mA
+04-22 02:50:10.006  5269  5269 I CZPROBE : type=30 motion_detect_wakeup
+04-22 02:50:10.007  5269  5269 I CZPROBE :      vendor=qualcomm max=1.0 power=0.025mA
+04-22 02:50:10.007  5269  5269 I CZPROBE : type=30 motion_detect
+04-22 02:50:10.008  5269  5269 I CZPROBE :      vendor=qualcomm max=1.0 power=0.025mA
+04-22 02:50:10.009  5269  5269 I CZPROBE : type=14 ak0991x Magnetometer-Uncalibrated Wakeup
+04-22 02:50:10.009  5269  5269 I CZPROBE :      vendor=akm max=4912.0 power=1.1mA
+04-22 02:50:10.010  5269  5269 I CZPROBE : type=14 ak0991x Magnetometer-Uncalibrated Non-wakeup
+04-22 02:50:10.011  5269  5269 I CZPROBE :      vendor=akm max=4912.0 power=1.1mA
+04-22 02:50:10.011  5269  5269 I CZPROBE : type=2 ak0991x Magnetometer Wakeup
+04-22 02:50:10.012  5269  5269 I CZPROBE :      vendor=akm max=4912.0 power=1.1mA
+04-22 02:50:10.012  5269  5269 I CZPROBE : type=2 ak0991x Magnetometer Non-wakeup
+04-22 02:50:10.013  5269  5269 I CZPROBE :      vendor=akm max=4912.0 power=1.1mA
+04-22 02:50:10.014  5269  5269 I CZPROBE : type=65575 lifeq_lel_ott  Wakeup
+04-22 02:50:10.014  5269  5269 I CZPROBE :      vendor=LifeQ max=1.0 power=0.495mA
+04-22 02:50:10.015  5269  5269 I CZPROBE : type=65575 lifeq_lel_ott  Non-wakeup
+04-22 02:50:10.016  5269  5269 I CZPROBE :      vendor=LifeQ max=1.0 power=0.495mA
+04-22 02:50:10.017  5269  5269 I CZPROBE : type=10 linear_acceleration_wakeup
+04-22 02:50:10.018  5269  5269 I CZPROBE :      vendor=qualcomm max=1.0 power=0.515mA
+04-22 02:50:10.018  5269  5269 I CZPROBE : type=10 linear_acceleration
+04-22 02:50:10.019  5269  5269 I CZPROBE :      vendor=qualcomm max=1.0 power=0.515mA
+04-22 02:50:10.019  5269  5269 I CZPROBE : type=21 lifeq_lel_heart_rate  Wakeup
+04-22 02:50:10.020  5269  5269 I CZPROBE :      vendor=LifeQ max=1.0 power=0.495mA
+04-22 02:50:10.021  5269  5269 I CZPROBE : type=21 lifeq_lel_heart_rate  Non-wakeup
+04-22 02:50:10.022  5269  5269 I CZPROBE :      vendor=LifeQ max=1.0 power=0.495mA
+04-22 02:50:10.022  5269  5269 I CZPROBE : type=65581 lifeq_lel_daily_rhr  Wakeup
+04-22 02:50:10.024  5269  5269 I CZPROBE :      vendor=LifeQ max=1.0 power=0.495mA
+04-22 02:50:10.024  5269  5269 I CZPROBE : type=65581 lifeq_lel_daily_rhr  Non-wakeup
+04-22 02:50:10.025  5269  5269 I CZPROBE :      vendor=LifeQ max=1.0 power=0.495mA
+04-22 02:50:10.026  5269  5269 I CZPROBE : type=16 lsm6dso Gyroscope-Uncalibrated Wakeup
+04-22 02:50:10.027  5269  5269 I CZPROBE :      vendor=STMicro max=34.905556 power=0.55mA
+04-22 02:50:10.027  5269  5269 I CZPROBE : type=16 lsm6dso Gyroscope-Uncalibrated Non-wakeup
+04-22 02:50:10.028  5269  5269 I CZPROBE :      vendor=STMicro max=34.905556 power=0.55mA
+04-22 02:50:10.029  5269  5269 I CZPROBE : type=15 Game Rotation Vector  Wakeup
+04-22 02:50:10.030  5269  5269 I CZPROBE :      vendor=qualcomm max=1.0 power=0.515mA
+04-22 02:50:10.030  5269  5269 I CZPROBE : type=15 Game Rotation Vector  Non-wakeup
+04-22 02:50:10.031  5269  5269 I CZPROBE :      vendor=qualcomm max=1.0 power=0.515mA
+04-22 02:50:10.031  5269  5269 I CZPROBE : type=20 sns_geomag_rv  Wakeup
+04-22 02:50:10.032  5269  5269 I CZPROBE :      vendor=qualcomm max=1.0 power=0.925mA
+04-22 02:50:10.033  5269  5269 I CZPROBE : type=20 sns_geomag_rv  Non-wakeup
+04-22 02:50:10.034  5269  5269 I CZPROBE :      vendor=qualcomm max=1.0 power=0.925mA
+04-22 02:50:10.034  5269  5269 I CZPROBE : type=4 lsm6dso Gyroscope Wakeup
+04-22 02:50:10.035  5269  5269 I CZPROBE :      vendor=STMicro max=34.905556 power=0.55mA
+04-22 02:50:10.036  5269  5269 I CZPROBE : type=4 lsm6dso Gyroscope Non-wakeup
+04-22 02:50:10.037  5269  5269 I CZPROBE :      vendor=STMicro max=34.905556 power=0.55mA
+04-22 02:50:10.037  5269  5269 I CZPROBE : type=31 lifeq_lel_heart_beat  Wakeup
+04-22 02:50:10.038  5269  5269 I CZPROBE :      vendor=LifeQ max=1.0 power=0.495mA
+04-22 02:50:10.039  5269  5269 I CZPROBE : type=31 lifeq_lel_heart_beat  Non-wakeup
+04-22 02:50:10.039  5269  5269 I CZPROBE :      vendor=LifeQ max=1.0 power=0.495mA
+04-22 02:50:10.040  5269  5269 I CZPROBE : type=65574 lifeq_lel_rr  Wakeup
+04-22 02:50:10.040  5269  5269 I CZPROBE :      vendor=LifeQ max=1.0 power=0.495mA
+04-22 02:50:10.041  5269  5269 I CZPROBE : type=65574 lifeq_lel_rr  Non-wakeup
+04-22 02:50:10.042  5269  5269 I CZPROBE :      vendor=LifeQ max=1.0 power=0.495mA
+04-22 02:50:10.042  5269  5269 I CZPROBE : type=9 gravity  Wakeup
+04-22 02:50:10.043  5269  5269 I CZPROBE :      vendor=qualcomm max=1.0 power=0.515mA
+04-22 02:50:10.043  5269  5269 I CZPROBE : type=9 gravity  Non-wakeup
+04-22 02:50:10.044  5269  5269 I CZPROBE :      vendor=qualcomm max=1.0 power=0.515mA
+04-22 02:50:10.044  5269  5269 I CZPROBE : type=17 sns_smd  Wakeup
+04-22 02:50:10.045  5269  5269 I CZPROBE :      vendor=qualcomm max=1.0 power=0.025mA
+04-22 02:50:10.045  5269  5269 I CZPROBE : type=65582 lifeq_lel_basal_rhr  Wakeup
+04-22 02:50:10.046  5269  5269 I CZPROBE :      vendor=LifeQ max=1.0 power=0.495mA
+04-22 02:50:10.046  5269  5269 I CZPROBE : type=65582 lifeq_lel_basal_rhr  Non-wakeup
+04-22 02:50:10.047  5269  5269 I CZPROBE :      vendor=LifeQ max=1.0 power=0.495mA
+04-22 02:50:10.048  5269  5269 I CZPROBE : type=65573 lifeq_lel_calories  Wakeup
+04-22 02:50:10.048  5269  5269 I CZPROBE :      vendor=LifeQ max=1.0 power=0.495mA
+04-22 02:50:10.049  5269  5269 I CZPROBE : type=65573 lifeq_lel_calories  Non-wakeup
+04-22 02:50:10.049  5269  5269 I CZPROBE :      vendor=LifeQ max=1.0 power=0.495mA
+04-22 02:50:10.050  5269  5269 I CZPROBE : type=35 lsm6dso Accelerometer-Uncalibrated Wakeup
+04-22 02:50:10.050  5269  5269 I CZPROBE :      vendor=STMicro max=156.9064 power=0.18mA
+04-22 02:50:10.051  5269  5269 I CZPROBE : type=35 lsm6dso Accelerometer-Uncalibrated Non-wakeup
+04-22 02:50:10.051  5269  5269 I CZPROBE :      vendor=STMicro max=156.9064 power=0.18mA
+04-22 02:50:10.052  5269  5269 I CZPROBE : type=5 ltr308 Ambient Light Sensor Wakeup
+04-22 02:50:10.052  5269  5269 I CZPROBE :      vendor=Lite-On max=1.0 power=0.11mA
+04-22 02:50:10.053  5269  5269 I CZPROBE : type=5 ltr308 Ambient Light Sensor Non-wakeup
+04-22 02:50:10.054  5269  5269 I CZPROBE :      vendor=Lite-On max=1.0 power=0.11mA
+04-22 02:50:10.054  5269  5269 I CZPROBE : type=1 lsm6dso Accelerometer Wakeup
+04-22 02:50:10.055  5269  5269 I CZPROBE :      vendor=STMicro max=156.9064 power=0.18mA
+04-22 02:50:10.056  5269  5269 I CZPROBE : type=1 lsm6dso Accelerometer Non-wakeup
+04-22 02:50:10.056  5269  5269 I CZPROBE :      vendor=STMicro max=156.9064 power=0.18mA
+04-22 02:50:10.057  5269  5269 I CZPROBE : 
+04-22 02:50:10.057  5269  5269 I CZPROBE : ===== LIVE INPUT =====
+04-22 02:50:10.057  5269  5269 I CZPROBE : Press both pushers, click the crown, then rotate it.
+04-22 02:50:56.119  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:50:58.684  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:50:58.740  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:00.744  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:00.808  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:00.873  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:00.939  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:01.005  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:01.073  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:01.149  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:01.222  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:01.290  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:01.356  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:01.421  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:01.488  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:01.554  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:01.626  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:01.696  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:01.774  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:01.844  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:01.914  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:01.982  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:02.052  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:02.122  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:02.191  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:02.260  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:02.339  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:02.408  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:02.480  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:02.550  5269  5269 I CZPROBE : ROTARY    raw=-0.035  factor=128.0  -> 4px  dev=bg-spi
+04-22 02:51:02.788  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:03.294  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:03.375  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:04.607  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:04.684  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:04.761  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:04.848  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:05.046  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:05.208  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:05.288  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:05.379  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:05.517  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:05.596  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:05.674  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:05.753  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:05.840  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:05.923  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:06.004  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:06.085  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:06.167  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:06.248  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:06.330  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:06.419  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:06.504  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:06.590  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:06.784  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:06.939  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:07.022  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:07.106  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:07.199  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:07.286  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:07.371  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:07.459  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:07.546  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:07.632  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:07.719  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:07.825  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:07.912  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:07.999  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:08.085  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:08.172  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:08.259  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:08.350  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:08.452  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:08.549  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:08.649  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:08.751  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:08.848  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:08.951  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:09.044  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:09.142  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:09.302  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:09.402  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:09.499  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:09.599  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:09.694  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:09.785  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:09.878  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:09.971  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:10.074  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:10.166  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:10.259  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:10.353  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:10.445  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:10.546  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:10.641  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:10.735  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:10.831  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:10.926  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:11.021  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:11.127  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:11.223  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:11.319  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:11.417  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:11.514  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:11.618  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:11.718  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:12.649  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:12.763  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:12.868  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:12.977  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:13.085  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:13.196  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:13.316  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:13.424  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:13.535  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:13.644  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:13.753  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:13.872  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:13.985  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:14.098  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:14.209  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:14.344  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:14.466  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:14.578  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:14.688  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:14.803  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:14.919  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:15.040  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:15.153  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:15.268  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:15.387  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:15.497  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:15.625  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:15.738  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:15.849  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:15.965  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi
+04-22 02:51:16.079  5269  5269 I CZPROBE : ROTARY    raw=0.035  factor=128.0  -> -4px  dev=bg-spi

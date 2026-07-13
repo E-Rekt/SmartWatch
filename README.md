@@ -2,7 +2,8 @@
 
 Standalone **Wear OS 2** productivity app for a **Citizen CZ Smart Gen 1**
 (P990MV-01 · Snapdragon Wear 3100 · 1 GB RAM · 416×416 round AMOLED ·
-Wear OS by Google 2.45 · Android 9 / **API 28**).
+Wear OS by Google 2.66 · Android 9 / **API 28** — as measured on-device, see
+[`docs/probe-results.md`](docs/probe-results.md)).
 
 Focus: task list, time-based reminders, timers/Pomodoro, and voice
 quick-capture — no phone companion required. We are **not** replacing the OS
@@ -24,8 +25,8 @@ Kotlin, JVM target 17.
 
 ## Build order
 
-1. **Toolchain + hardware probe** — [`CZProbe/`](CZProbe/) ← current step
-2. Room schema (Task / Reminder / TimerPreset) + repository
+1. **Toolchain + hardware probe** — [`CZProbe/`](CZProbe/) ✅ done, findings in [`docs/probe-results.md`](docs/probe-results.md)
+2. Room schema (Task / Reminder / TimerPreset) + repository ← current step (solve watch time-sync first — probe gotcha #3)
 3. Compose-for-Wear (or Views) shell, benchmarked on-device immediately
 4. Alarm + notification layer (reminders and timers share it)
 5. Voice quick-capture + stem-button bindings

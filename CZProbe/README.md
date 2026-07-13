@@ -67,6 +67,11 @@ Paste the logcat output back to me.
 - **Rotary events go to the focused view.** The probe calls `requestFocus()` on
   the ScrollView for exactly this reason. Forget it in the real app and you'll
   conclude the crown is broken.
+- **…and the focused view *consumes* them (API 26+).** A focused scrollable
+  view handles rotary natively, so `Activity.onGenericMotionEvent` only sees
+  edge-of-scroll leftovers — this masked the working encoder for four capture
+  attempts. Observe crown input in `dispatchGenericMotionEvent` (the committed
+  `MainActivity.kt` does; the brief's appendix predates this fix).
 
 ---
 

@@ -97,18 +97,19 @@ class MainActivity : Activity() {
 
     // ---------------- rotary crown ----------------
 
-    override fun onGenericMotionEvent(event: MotionEvent): Boolean {
+    // Log at the DISPATCH layer: since API 26 a focused scrollable view consumes
+    // rotary AXIS_SCROLL events natively, so onGenericMotionEvent only ever sees
+    // the leftovers at the scroll edges. dispatch sees every event; super routes
+    // it on to the ScrollView, which does the actual scrolling.
+    override fun dispatchGenericMotionEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_SCROLL &&
             event.isFromSource(InputDevice.SOURCE_ROTARY_ENCODER)
         ) {
             val raw = event.getAxisValue(MotionEvent.AXIS_SCROLL)
             val factor = ViewConfiguration.get(this).scaledVerticalScrollFactor
-            val px = -raw * factor
-            emit("ROTARY    raw=$raw  factor=$factor  -> ${px.toInt()}px  dev=${event.device?.name}")
-            scroll.scrollBy(0, px.toInt())
-            return true
+            emit("ROTARY    raw=$raw  factor=$factor  -> ${(-raw * factor).toInt()}px  dev=${event.device?.name}")
         }
-        return super.onGenericMotionEvent(event)
+        return super.dispatchGenericMotionEvent(event)
     }
 
     // ---------------- dumps ----------------
