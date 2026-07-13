@@ -1,0 +1,14 @@
+# Gradle
+.gradle/
+build/
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+.kotlin/
+
+# Local SDK location — machine-specific, never commit
+local.properties
+
+# APK outputs land in app/build/ (already ignored); captures live in docs/
+*.hprof
