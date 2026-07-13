@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Debug-only: proves which of TIME_SET / TIMEZONE_CHANGED / BOOT_COMPLETED
+         manifest broadcasts reach a non-running app on THIS Fossil Wear OS 2.66
+         build — the assumption step 4's whole rescheduling story stands on.
+         MEASURED: TIMEZONE_CHANGED and BOOT_COMPLETED are delivered (both are
+         on the API-26 exemption list); TIME_SET is NOT delivered for
+         programmatic clock changes — see docs/data-layer-design.md. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <application>
+        <receiver android:name="com.cztask.debug.SignalProbeReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>
