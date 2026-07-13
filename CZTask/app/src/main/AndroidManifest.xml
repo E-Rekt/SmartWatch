@@ -11,5 +11,23 @@
         <meta-data
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
+
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.DeviceDefault">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.TasksActivity" android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity android:name=".ui.RemindersActivity" android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity android:name=".ui.TimersActivity" android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity android:name=".ui.PickerActivity" android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
     </application>
 </manifest>

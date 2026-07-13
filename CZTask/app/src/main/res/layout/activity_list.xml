@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Shared by every screen: one curved, crown-scrollable list. Focus is
+     requested in code — rotary events go to the focused view (probe finding). -->
+<androidx.wear.widget.WearableRecyclerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:focusable="true"
+    android:focusableInTouchMode="true" />

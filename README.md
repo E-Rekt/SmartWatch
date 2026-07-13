@@ -26,8 +26,8 @@ Kotlin, JVM target 17.
 ## Build order
 
 1. **Toolchain + hardware probe** — [`CZProbe/`](CZProbe/) ✅ done, findings in [`docs/probe-results.md`](docs/probe-results.md)
-2. Room schema (Task / Reminder / TimerPreset) + repository ← current step (solve watch time-sync first — probe gotcha #3)
-3. Compose-for-Wear (or Views) shell, benchmarked on-device immediately
+2. Room schema (Task / Reminder / TimerPreset) + repository ✅ done — [`CZTask/`](CZTask/), design in [`docs/data-layer-design.md`](docs/data-layer-design.md); time-sync solved ([`docs/time-sync.md`](docs/time-sync.md))
+3. **Views** shell (Compose ruled out by measured lowRamDevice/96 MB heap), benchmarked on-device immediately ← current step
 4. Alarm + notification layer (reminders and timers share it)
 5. Voice quick-capture + stem-button bindings
 6. Tile + complication

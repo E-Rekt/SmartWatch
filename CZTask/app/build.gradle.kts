@@ -39,6 +39,12 @@ android {
 ksp { arg("room.schemaLocation", "$projectDir/schemas") }
 
 dependencies {
+    implementation(libs.core.ktx)
+    implementation(libs.activity.ktx)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.recyclerview)
+    implementation(libs.wear)
+    implementation(libs.wear.input)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     implementation(libs.coroutines.android)
