@@ -28,6 +28,13 @@ class TimerStateStore(context: Context) {
         val taskId: Long = -1L,
         val label: String? = null,
         val plannedSeconds: Int = 0,
+        // Phase B: act lifecycle. phase 0 = RUN, 1 = OVERRUN (past zero,
+        // surfacing prompts active). Extensions increment; session row id
+        // links the durable focus_session record.
+        val phase: Int = PHASE_RUN,
+        val warnFired: Boolean = false,
+        val extendedCount: Int = 0,
+        val sessionId: Long = -1L,
     )
 
     /** Recovery outcome. LostToReboot is returned exactly once (the record
@@ -49,6 +56,10 @@ class TimerStateStore(context: Context) {
             .putLong(K_TASK_ID, t.taskId)
             .putString(K_LABEL, t.label)
             .putInt(K_PLANNED_SECONDS, t.plannedSeconds)
+            .putInt(K_PHASE, t.phase)
+            .putBoolean(K_WARN_FIRED, t.warnFired)
+            .putInt(K_EXTENDED_COUNT, t.extendedCount)
+            .putLong(K_SESSION_ID, t.sessionId)
             .commit()
     }
 
@@ -65,6 +76,10 @@ class TimerStateStore(context: Context) {
             taskId = sp.getLong(K_TASK_ID, -1L),
             label = sp.getString(K_LABEL, null),
             plannedSeconds = sp.getInt(K_PLANNED_SECONDS, 0),
+            phase = sp.getInt(K_PHASE, PHASE_RUN),
+            warnFired = sp.getBoolean(K_WARN_FIRED, false),
+            extendedCount = sp.getInt(K_EXTENDED_COUNT, 0),
+            sessionId = sp.getLong(K_SESSION_ID, -1L),
         )
         if (t.bootCount != currentBootCount) {
             clear()   // reported once: next call returns None
@@ -73,13 +88,20 @@ class TimerStateStore(context: Context) {
         return Recovery.Running(t)
     }
 
-    private companion object {
-        const val K_PRESET = "preset_id"
-        const val K_END_ELAPSED = "end_elapsed_millis"
-        const val K_BOOT = "boot_count"
-        const val K_STARTED_WALL = "started_wall_utc"
-        const val K_TASK_ID = "task_id"
-        const val K_LABEL = "label"
-        const val K_PLANNED_SECONDS = "planned_seconds"
+    companion object {
+        const val PHASE_RUN = 0
+        const val PHASE_OVERRUN = 1
+
+        private const val K_PRESET = "preset_id"
+        private const val K_END_ELAPSED = "end_elapsed_millis"
+        private const val K_BOOT = "boot_count"
+        private const val K_STARTED_WALL = "started_wall_utc"
+        private const val K_TASK_ID = "task_id"
+        private const val K_LABEL = "label"
+        private const val K_PLANNED_SECONDS = "planned_seconds"
+        private const val K_PHASE = "phase"
+        private const val K_WARN_FIRED = "warn_fired"
+        private const val K_EXTENDED_COUNT = "extended_count"
+        private const val K_SESSION_ID = "session_id"
     }
 }

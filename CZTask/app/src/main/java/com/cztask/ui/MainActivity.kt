@@ -144,13 +144,15 @@ class MainActivity : ComponentActivity() {
 
     override fun onKeyLongPress(keyCode: Int, event: KeyEvent): Boolean =
         if (keyCode == KeyEvent.KEYCODE_STEM_2) {
-            // The blind "just start" gesture: instant act on the featured task.
+            // The blind gesture: act running -> +5 KEEP GOING; otherwise
+            // instant act on the featured task.
             val id = featuredId
             val title = featuredTitle
-            if (id >= 0 && title != null && heroState is NowCardView.State.Featured) {
-                startAct(id, title)
-            } else {
-                open(TimersActivity::class.java)
+            when {
+                heroState is NowCardView.State.Act -> TimerService.extend(this)
+                id >= 0 && title != null && heroState is NowCardView.State.Featured ->
+                    startAct(id, title)
+                else -> open(TimersActivity::class.java)
             }
             true
         } else super.onKeyLongPress(keyCode, event)

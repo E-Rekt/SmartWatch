@@ -154,6 +154,34 @@ class NextFireCalculatorTest {
         assertEquals(utc(monday, lateNight), NextFireCalculator.lateRepeatingOccurrence(r, now, ZONE))
     }
 
+    @Test fun `future snooze is the sole next occurrence`() {
+        val nine = LocalTime.of(9, 0)
+        val snooze = utc(monday, LocalTime.of(14, 30))
+        val r = daily(nine).copy(snoozeUntilUtcMillis = snooze)
+        val now = utc(monday, LocalTime.NOON)
+        assertEquals(snooze, NextFireCalculator.nextOccurrence(r, now, ZONE))
+    }
+
+    @Test fun `elapsed snooze falls back to the rule`() {
+        val nine = LocalTime.of(9, 0)
+        val r = daily(nine).copy(
+            snoozeUntilUtcMillis = utc(monday, LocalTime.of(11, 0)),
+            lastFiredOccurrenceUtcMillis = utc(monday, LocalTime.of(11, 0)),
+        )
+        val now = utc(monday, LocalTime.NOON)
+        // Snooze already consumed (markFired stamped it): tomorrow 09:00.
+        assertEquals(utc(monday.plusDays(1), nine), NextFireCalculator.nextOccurrence(r, now, ZONE))
+    }
+
+    @Test fun `snooze survives a backward clock step without double-fire risk`() {
+        val nine = LocalTime.of(9, 0)
+        val snooze = utc(monday, LocalTime.of(14, 30))
+        val r = daily(nine).copy(snoozeUntilUtcMillis = snooze)
+        // Clock stepped back before the snooze: still the sole next occurrence.
+        val now = utc(monday, LocalTime.of(8, 0))
+        assertEquals(snooze, NextFireCalculator.nextOccurrence(r, now, ZONE))
+    }
+
     @Test fun `DST gap one-shot resolves forward and stays schedulable`() {
         // US spring-forward 2026-03-08: 02:30 EST does not exist; java.time shifts to 03:30 EDT.
         val gapDate = LocalDate.of(2026, 3, 8)

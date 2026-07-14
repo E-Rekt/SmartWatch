@@ -50,6 +50,10 @@
             android:theme="@android:style/Theme.DeviceDefault" />
         <activity android:name=".ui.PickerActivity" android:exported="false"
             android:theme="@android:style/Theme.DeviceDefault" />
+        <activity android:name=".ui.AlertActivity" android:exported="false"
+            android:launchMode="singleTop"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.DeviceDefault" />
 
         <receiver android:name=".alarm.AlarmReceiver" android:exported="false" />
         <receiver android:name=".alarm.BootReceiver" android:exported="true">

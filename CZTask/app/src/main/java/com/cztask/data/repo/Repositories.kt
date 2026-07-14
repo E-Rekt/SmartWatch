@@ -1,5 +1,6 @@
 package com.cztask.data.repo
 
+import com.cztask.data.db.DailyTallyDao
 import com.cztask.data.db.Reminder
 import com.cztask.data.db.ReminderDao
 import com.cztask.data.db.ReminderWithTitle
@@ -24,6 +25,7 @@ class TaskRepository(
     private val reminders: ReminderDao,
     private val time: TimeSource,
     private val pins: com.cztask.data.time.PinStore? = null,
+    private val tally: DailyTallyDao? = null,
 ) {
     fun observeAll(): Flow<List<Task>> = tasks.observeAll()
 
@@ -62,9 +64,17 @@ class TaskRepository(
 
     /** Returns ids of this task's reminders. Completion suppresses them from
      *  scheduling (enabledOnce joins task.done); step 4 uses the ids to dismiss
-     *  any currently-showing notification and re-derive the alarm plan. */
+     *  any currently-showing notification and re-derive the alarm plan.
+     *  Completion pays rings: +1, or +10 for the ONE Thing (the day's critical
+     *  task deserves the jackpot). Un-doing never claws back — RSD rule. */
     suspend fun setDone(id: Long, done: Boolean): List<Long> {
         tasks.setDone(id, done)
+        if (done && tally != null) {
+            val today = java.time.Instant.ofEpochMilli(time.nowUtcMillis())
+                .atZone(time.zone()).toLocalDate().toEpochDay()
+            val wasPinned = pins?.pinnedId(today) == id
+            tally.add(today, tasks = 1, rings = if (wasPinned) 10 else 1)
+        }
         return reminders.idsForTask(id)
     }
 
@@ -129,6 +139,8 @@ class ReminderRepository(
                 taskId = taskId, label = label?.trim(),
                 timeOfDayMinutes = at.hour * 60 + at.minute,
                 daysOfWeekMask = daysOfWeekMask,
+                // Phase B default: checkpoints launch work, not just buzz.
+                launchMode = 1,
             )
         )
     }
@@ -139,8 +151,12 @@ class ReminderRepository(
 
     /** Step 4 calls after delivering; occ = the SCHEDULED occurrence instant
      *  (from SchedulePlan/DueReminder), never the delivery wall time — the
-     *  backward-jump dedup depends on that. */
+     *  backward-jump dedup depends on that. Also consumes any snooze. */
     suspend fun markFired(id: Long, occurrenceUtcMillis: Long) = dao.markFired(id, occurrenceUtcMillis)
+
+    /** SNOOZE pill: defer by minutes from now; becomes the sole next occurrence. */
+    suspend fun snooze(id: Long, minutes: Int) =
+        dao.snoozeUntil(id, time.nowUtcMillis() + minutes * 60_000L)
 
     suspend fun schedulePlan(nowUtcMillis: Long = time.nowUtcMillis()): SchedulePlan {
         val zone = time.zone()
@@ -148,6 +164,18 @@ class ReminderRepository(
 
         val dueNow = buildList {
             for (r in enabled) {
+                val snooze = r.snoozeUntilUtcMillis
+                if (snooze != null) {
+                    // An elapsed snooze is due exactly once; a future one is
+                    // handled by nextOccurrence. Either way it is the sole
+                    // candidate for this reminder.
+                    if (snooze <= nowUtcMillis &&
+                        snooze > (r.lastFiredOccurrenceUtcMillis ?: Long.MIN_VALUE)
+                    ) {
+                        add(SchedulePlan.DueReminder(r, snooze))
+                    }
+                    continue
+                }
                 if (NextFireCalculator.isOverdueOneShot(r, nowUtcMillis, zone)) {
                     NextFireCalculator.oneShotOccurrence(r, zone)
                         ?.let { add(SchedulePlan.DueReminder(r, it)) }

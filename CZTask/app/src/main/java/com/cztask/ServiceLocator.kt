@@ -59,6 +59,7 @@ object ServiceLocator {
         }
         Room.databaseBuilder(appContext, AppDatabase::class.java, DB_NAME)
             .addCallback(SeedCallback)
+            .addMigrations(com.cztask.data.db.MIGRATION_1_2)
             // WAL over the lowRam TRUNCATE heuristic: measured-slow eMMC makes
             // per-commit fsync the dominant write cost; WAL amortizes it.
             .setJournalMode(RoomDatabase.JournalMode.WRITE_AHEAD_LOGGING)
@@ -74,7 +75,7 @@ object ServiceLocator {
     }
 
     val taskRepository: TaskRepository by lazy {
-        TaskRepository(db.taskDao(), db.reminderDao(), time, pinStore)
+        TaskRepository(db.taskDao(), db.reminderDao(), time, pinStore, db.dailyTallyDao())
     }
     val reminderRepository: ReminderRepository by lazy {
         ReminderRepository(db.reminderDao(), time)

@@ -42,6 +42,12 @@ object NextFireCalculator {
      *  spent one-shot / no future occurrence). Pure function of (row, now, zone). */
     fun nextOccurrence(r: Reminder, nowUtcMillis: Long, zone: ZoneId): Long? {
         if (!r.enabled) return null
+        // A future snooze is the reminder's SOLE next occurrence: the user
+        // explicitly deferred; the rule resumes after it fires (markFired
+        // clears the snooze along with stamping the dedup floor).
+        r.snoozeUntilUtcMillis?.let { snooze ->
+            if (snooze > nowUtcMillis) return snooze
+        }
         val time = LocalTime.ofSecondOfDay(r.timeOfDayMinutes * 60L)
         val floor = dedupFloor(r, nowUtcMillis)
 

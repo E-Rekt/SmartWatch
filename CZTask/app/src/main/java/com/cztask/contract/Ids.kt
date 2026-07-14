@@ -15,10 +15,15 @@ object Ids {
     const val NOTIF_TIMER_DONE = 2
     const val NOTIF_MISSED_SUMMARY = 3
     const val NOTIF_CLOCK_WARNING = 4
+    const val NOTIF_ACT_STATUS = 5
+    const val NOTIF_CHECKPOINT_PROMPT = 6
 
     const val RC_ALARM_NEXT_FIRE = 10     // the single coalesced RTC_WAKEUP alarm
     const val RC_TIMER_ELAPSED_ALARM = 11
     const val RC_DAILY_RECONCILE = 12     // elapsed-axis daily backstop
+    const val RC_ACT_WARN = 13            // T-5 transition warning
+    const val RC_ACT_OVERRUN = 14         // hyperfocus SURFACE? checks
+    const val RC_CAPTURE_WATCHDOG = 15    // reserved: Phase C biometric capture
 
     fun notifForReminder(reminderId: Long): Int = (1000 + (reminderId % 1_000_000)).toInt()
 }

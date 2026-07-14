@@ -84,6 +84,22 @@ object Notifications {
             .notify(Ids.NOTIF_TIMER_DONE, n)
     }
 
+    /** Hyperfocus surfacing: durable layer behind the SURFACE alert. Kind,
+     *  factual, dismissable — never an alarm bell. */
+    fun postSurfacePrompt(context: Context, overMinutes: Int, label: String?) {
+        val n = NotificationCompat.Builder(context, CH_REMINDERS)
+            .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
+            .setContentTitle("Surface?")
+            .setContentText("+$overMinutes min over" + (label?.let { " · ${it.take(14)}" } ?: ""))
+            .setContentIntent(openAppIntent(context))
+            .setAutoCancel(true)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setVibrate(longArrayOf(0, 120, 100, 120))   // double-buzz signature
+            .build()
+        context.getSystemService(NotificationManager::class.java)
+            .notify(Ids.NOTIF_ACT_STATUS, n)
+    }
+
     /** Reported once per lost timer (store self-clears): reboot wiped the
      *  elapsed-axis anchor, so the countdown could not survive. */
     fun postTimerLost(context: Context) {

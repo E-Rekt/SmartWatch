@@ -28,7 +28,19 @@ class BootReceiver : BroadcastReceiver() {
 
         if (isBoot) {
             when (val rec = ServiceLocator.timerStateStore.recover(systemBootCount(app))) {
-                is TimerStateStore.Recovery.LostToReboot -> Notifications.postTimerLost(app)
+                is TimerStateStore.Recovery.LostToReboot -> {
+                    Notifications.postTimerLost(app)
+                    // History outlives the reboot: stamp the orphaned session.
+                    if (rec.timer.sessionId >= 0 && rec.timer.phase == TimerStateStore.PHASE_RUN) {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            ServiceLocator.db.focusSessionDao().finish(
+                                rec.timer.sessionId, System.currentTimeMillis(),
+                                com.cztask.data.db.FocusSession.OUTCOME_LOST_TO_REBOOT,
+                                rec.timer.extendedCount,
+                            )
+                        }
+                    }
+                }
                 is TimerStateStore.Recovery.Running -> {
                     // elapsed anchor survived?? bootCount matched — resume the
                     // countdown notification path via the backup alarm check.

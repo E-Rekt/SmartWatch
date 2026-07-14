@@ -77,6 +77,8 @@ class CzWatchFaceService : CanvasWatchFaceService() {
         @Volatile private var checkpointUrgent: Boolean = false
         @Volatile private var openTasks: Int = -1
         @Volatile private var oneThingLine: String? = null
+        @Volatile private var ringsToday: Int = 0
+        @Volatile private var streakDays: Int = 0
 
         private val timeFmt = DateTimeFormatter.ofPattern("HH:mm")
         private val dateFmt = DateTimeFormatter.ofPattern("EEE d MMM")
@@ -408,6 +410,28 @@ class CzWatchFaceService : CanvasWatchFaceService() {
             val y = bounds.height() - 60f
             canvas.drawBitmap(bmp, -off, y, null)
             canvas.drawBitmap(bmp, bounds.width() - off, y, null)
+
+            // Today's rings + emerald streak, floating just above the hill.
+            if (ringsToday > 0) {
+                ambientLinePaint.color = RING_GOLD
+                canvas.drawText("R×$ringsToday", bounds.exactCenterX() - 60f, y - 10f, ambientLinePaint)
+                ambientLinePaint.color = 0xFF606060.toInt()
+            }
+            if (streakDays > 0) {
+                iconPaint.style = Paint.Style.FILL
+                iconPaint.color = 0xFF2ECC71.toInt()
+                val startX = bounds.exactCenterX() + 20f
+                for (i in 0 until streakDays.coerceAtMost(7)) {
+                    val gx = startX + i * 14f
+                    val gy = y - 14f
+                    // tiny emerald: 4-point diamond
+                    canvas.drawLine(gx, gy - 5f, gx + 4f, gy, iconPaint.apply { strokeWidth = 3f; style = Paint.Style.STROKE })
+                    canvas.drawLine(gx + 4f, gy, gx, gy + 5f, iconPaint)
+                    canvas.drawLine(gx, gy + 5f, gx - 4f, gy, iconPaint)
+                    canvas.drawLine(gx - 4f, gy, gx, gy - 5f, iconPaint)
+                }
+                iconPaint.style = Paint.Style.FILL
+            }
         }
 
         private fun runningTimer(): TimerStateStore.RunningTimer? =
@@ -437,6 +461,18 @@ class CzWatchFaceService : CanvasWatchFaceService() {
                 }
                 val open = ServiceLocator.db.taskDao().openCount()
                 val (featured, pinned) = ServiceLocator.taskRepository.featured()
+                // Rings & Emeralds: today's collected rings + consecutive-day
+                // streak (RSD rule: a wild clock can never eat a streak — the
+                // tally just keys local days; ClockGuard banners real problems).
+                val today = java.time.LocalDate.now().toEpochDay()
+                val week = ServiceLocator.db.dailyTallyDao().lastWeek(today)
+                ringsToday = week.firstOrNull { it.epochDay == today }?.rings ?: 0
+                var streak = 0
+                for (d in 0..6) {
+                    val row = week.firstOrNull { it.epochDay == today - d }
+                    if (row != null && row.rings > 0) streak++ else if (d > 0) break
+                }
+                streakDays = streak
                 checkpointLine = next
                 checkpointUrgent = urgent
                 openTasks = open

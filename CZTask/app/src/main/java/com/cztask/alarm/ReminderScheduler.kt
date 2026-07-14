@@ -41,10 +41,23 @@ class ReminderScheduler(
         for (due in plan.dueNow) {
             val label = due.reminder.taskId?.let { tasks.title(it) }
                 ?: due.reminder.label.orEmpty().ifEmpty { "Reminder" }
+            // Notification first — ALWAYS the durable layer (measured homing
+            // can dismiss any activity).
             Notifications.postReminder(context, due.reminder.id, label)
             // Stamp the SCHEDULED occurrence instant (not delivery time) —
             // the backward-clock-jump dedup depends on it.
             reminders.markFired(due.reminder.id, due.occurrenceUtcMillis)
+            if (due.reminder.launchMode == 1) {
+                // Implementation-intention executor: the fire becomes a
+                // forced choice (START / SNOOZE / DONE), legal on API 28.
+                AlertBridge.showCheckpoint(
+                    context,
+                    reminderId = due.reminder.id,
+                    label = label,
+                    taskId = due.reminder.taskId ?: -1L,
+                    durationSeconds = due.reminder.defaultDurationSeconds ?: 0,
+                )
+            }
         }
         // Firing mutates the rows the plan was derived from; re-derive before arming.
         if (plan.dueNow.isNotEmpty()) plan = reminders.schedulePlan()

@@ -47,6 +47,7 @@ private object ExplodingReminderDao : ReminderDao {
     override suspend fun update(r: Reminder) = error("unexpected")
     override suspend fun setEnabled(id: Long, enabled: Boolean) = error("unexpected")
     override suspend fun markFired(id: Long, occ: Long) = error("unexpected")
+    override suspend fun snoozeUntil(id: Long, until: Long) = error("unexpected")
     override suspend fun delete(id: Long) = error("unexpected")
 }
 

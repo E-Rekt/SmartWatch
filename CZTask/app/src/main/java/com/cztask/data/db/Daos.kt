@@ -77,10 +77,47 @@ interface ReminderDao {
     @Query("UPDATE reminder SET enabled = :enabled WHERE id = :id")
     suspend fun setEnabled(id: Long, enabled: Boolean)
 
-    @Query("UPDATE reminder SET last_fired_occurrence_utc_millis = :occ WHERE id = :id")
+    /** Firing consumes any pending snooze along with stamping the dedup floor. */
+    @Query("UPDATE reminder SET last_fired_occurrence_utc_millis = :occ, snooze_until_utc_millis = NULL WHERE id = :id")
     suspend fun markFired(id: Long, occ: Long)
 
+    @Query("UPDATE reminder SET snooze_until_utc_millis = :until WHERE id = :id")
+    suspend fun snoozeUntil(id: Long, until: Long)
+
     @Query("DELETE FROM reminder WHERE id = :id") suspend fun delete(id: Long)
+}
+
+@Dao
+interface FocusSessionDao {
+    @Insert suspend fun insert(s: FocusSession): Long
+
+    @Query("UPDATE focus_session SET ended_utc_millis = :ended, outcome = :outcome, extended_count = :extended WHERE id = :id")
+    suspend fun finish(id: Long, ended: Long, outcome: Int, extended: Int)
+}
+
+@Dao
+abstract class DailyTallyDao {
+    @Query("SELECT * FROM daily_tally WHERE epoch_day = :day")
+    abstract suspend fun forDay(day: Long): DailyTally?
+
+    /** Last 7 days incl. today, newest first — the emerald streak window. */
+    @Query("SELECT * FROM daily_tally WHERE epoch_day > :day - 7 AND epoch_day <= :day ORDER BY epoch_day DESC")
+    abstract suspend fun lastWeek(day: Long): List<DailyTally>
+
+    @Query("UPDATE daily_tally SET acts_completed = acts_completed + :acts, tasks_done = tasks_done + :tasks, rings = rings + :rings WHERE epoch_day = :day")
+    protected abstract suspend fun bump(day: Long, acts: Int, tasks: Int, rings: Int): Int
+
+    @Insert
+    protected abstract suspend fun insert(t: DailyTally)
+
+    /** SQLite 3.22 house rule: no UPSERT (3.24). UPDATE-then-INSERT in a
+     *  transaction is the portable equivalent. */
+    @androidx.room.Transaction
+    open suspend fun add(day: Long, acts: Int = 0, tasks: Int = 0, rings: Int = 0) {
+        if (bump(day, acts, tasks, rings) == 0) {
+            insert(DailyTally(day, acts, tasks, rings))
+        }
+    }
 }
 
 @Dao
