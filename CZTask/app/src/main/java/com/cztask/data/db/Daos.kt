@@ -22,6 +22,9 @@ interface TaskDao {
 
     @Query("DELETE FROM task WHERE id = :id") suspend fun delete(id: Long)
     @Query("DELETE FROM task WHERE done = 1") suspend fun deleteDone()
+
+    /** Notification content for a task-linked reminder. */
+    @Query("SELECT title FROM task WHERE id = :id") suspend fun title(id: Long): String?
 }
 
 @Dao

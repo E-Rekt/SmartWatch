@@ -2,19 +2,25 @@ package com.cztask.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
+import android.os.SystemClock
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.cztask.R
 import com.cztask.ServiceLocator
+import com.cztask.data.db.TimerPreset
+import com.cztask.data.time.TimerStateStore
+import com.cztask.data.time.systemBootCount
+import com.cztask.timer.TimerService
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class TimersActivity : ComponentActivity() {
 
     private val repo get() = ServiceLocator.timerPresetRepository
     private lateinit var adapter: RowAdapter
+    private var presets: List<TimerPreset> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,26 +28,57 @@ class TimersActivity : ComponentActivity() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                repo.observeAll().collect { presets ->
-                    adapter.submit(buildList {
-                        add(Row.Center(getString(R.string.add_preset), onTap = ::addPreset))
-                        for (p in presets) add(
-                            Row.Item(
-                                glyph = "⏱",
-                                title = p.label ?: formatDuration(p.durationSeconds),
-                                subtitle = if (p.label != null) formatDuration(p.durationSeconds) else null,
-                                onTap = {
-                                    Toast.makeText(this@TimersActivity, R.string.timers_step4, Toast.LENGTH_SHORT).show()
-                                },
-                                onLongPress = {
-                                    lifecycleScope.launch { repo.delete(p.id) }
-                                },
-                            )
-                        )
-                    })
+                launch {
+                    repo.observeAll().collect { list ->
+                        presets = list
+                        render()
+                    }
+                }
+                // Countdown row ticker: re-render each second only while a
+                // timer is actually running.
+                launch {
+                    while (true) {
+                        if (runningTimer() != null) render()
+                        delay(1000)
+                    }
                 }
             }
         }
+    }
+
+    private fun runningTimer(): TimerStateStore.RunningTimer? =
+        (ServiceLocator.timerStateStore.recover(systemBootCount(this))
+            as? TimerStateStore.Recovery.Running)?.timer
+
+    private fun render() {
+        adapter.submit(buildList {
+            runningTimer()?.let { t ->
+                val left = t.endElapsedRealtimeMillis - SystemClock.elapsedRealtime()
+                if (left > 0) add(
+                    Row.Item(
+                        glyph = "■",
+                        title = TimerService.format(left),
+                        subtitle = getString(R.string.timer_tap_to_cancel),
+                        onTap = { TimerService.cancel(this@TimersActivity); render() },
+                    )
+                )
+            }
+            add(Row.Center(getString(R.string.add_preset), onTap = ::addPreset))
+            for (p in presets) add(
+                Row.Item(
+                    glyph = "⏱",
+                    title = p.label ?: formatDuration(p.durationSeconds),
+                    subtitle = if (p.label != null) formatDuration(p.durationSeconds) else null,
+                    onTap = {
+                        TimerService.start(this@TimersActivity, p.id, p.durationSeconds)
+                        render()
+                    },
+                    onLongPress = {
+                        lifecycleScope.launch { repo.delete(p.id) }
+                    },
+                )
+            )
+        })
     }
 
     private fun addPreset() {

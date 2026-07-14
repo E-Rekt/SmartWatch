@@ -13,7 +13,7 @@
     <string name="pick_hour">Hour</string>
     <string name="pick_minute">Minute</string>
     <string name="pick_minutes_duration">Minutes</string>
-    <string name="timers_step4">Timer engine arrives in step 4</string>
+    <string name="timer_tap_to_cancel">running — tap to cancel</string>
     <string name="empty_tasks">No tasks yet.\nTop button adds one.</string>
     <string name="empty_reminders">No reminders yet.</string>
 </resources>

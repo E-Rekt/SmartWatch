@@ -30,6 +30,7 @@ private object ExplodingTaskDao : TaskDao {
     override suspend fun setDone(id: Long, done: Boolean) = error("unexpected")
     override suspend fun delete(id: Long) = error("unexpected")
     override suspend fun deleteDone() = error("unexpected")
+    override suspend fun title(id: Long): String? = error("unexpected")
 }
 
 private object ExplodingReminderDao : ReminderDao {

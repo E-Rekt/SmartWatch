@@ -9,6 +9,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.cztask.R
 import com.cztask.ServiceLocator
+import com.cztask.alarm.Notifications
+import com.cztask.contract.Ids
 import kotlinx.coroutines.launch
 
 class TasksActivity : ComponentActivity() {
@@ -32,15 +34,16 @@ class TasksActivity : ComponentActivity() {
                                 title = t.title,
                                 dimTitle = t.done,
                                 onTap = {
-                                    lifecycleScope.launch {
+                                    // appScope: the re-arm must survive swipe-dismiss.
+                                    ServiceLocator.appScope.launch {
                                         val affected = repo.setDone(t.id, !t.done)
-                                        logWorklist("setDone", affected)
+                                        cancelAndReconcile("setDone", affected, cancelNotifs = t.done.not())
                                     }
                                 },
                                 onLongPress = {
-                                    lifecycleScope.launch {
+                                    ServiceLocator.appScope.launch {
                                         val orphaned = repo.delete(t.id)
-                                        logWorklist("delete", orphaned)
+                                        cancelAndReconcile("delete", orphaned, cancelNotifs = true)
                                     }
                                 },
                             )
@@ -62,10 +65,15 @@ class TasksActivity : ComponentActivity() {
         }
     }
 
-    /** Step 4 consumes these ids to cancel alarms/notifications; until then we
-     *  log them so the contract is visible in the deploy loop. */
-    private fun logWorklist(op: String, ids: List<Long>) {
-        if (ids.isNotEmpty()) Log.i("CZTASK_WORKLIST", "$op -> cancel reminders $ids")
+    /** The step-4 contract in action: affected reminder ids dismiss any showing
+     *  notifications, and the alarm plan is re-derived. */
+    private suspend fun cancelAndReconcile(op: String, ids: List<Long>, cancelNotifs: Boolean) {
+        val app = applicationContext   // runs in appScope; never hold the activity
+        if (ids.isNotEmpty()) {
+            Log.i("CZTASK_WORKLIST", "$op -> reminders $ids (cancelNotifs=$cancelNotifs)")
+            if (cancelNotifs) for (id in ids) Notifications.cancel(app, Ids.notifForReminder(id))
+        }
+        ServiceLocator.reminderScheduler.reconcile(app)
     }
 
     private companion object { const val RC_ADD_TASK = 11 }

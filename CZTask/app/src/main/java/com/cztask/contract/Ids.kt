@@ -18,6 +18,7 @@ object Ids {
 
     const val RC_ALARM_NEXT_FIRE = 10     // the single coalesced RTC_WAKEUP alarm
     const val RC_TIMER_ELAPSED_ALARM = 11
+    const val RC_DAILY_RECONCILE = 12     // elapsed-axis daily backstop
 
     fun notifForReminder(reminderId: Long): Int = (1000 + (reminderId % 1_000_000)).toInt()
 }

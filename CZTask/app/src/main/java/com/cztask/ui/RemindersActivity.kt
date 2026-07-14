@@ -41,10 +41,18 @@ class RemindersActivity : ComponentActivity() {
                                     subtitle = "${formatRule(r)} · ${formatNext(r, SystemTimeSource)}",
                                     dimTitle = !r.enabled,
                                     onTap = {
-                                        lifecycleScope.launch { repo.setEnabled(r.id, !r.enabled) }
+                                        // appScope, not lifecycleScope: swipe-dismiss
+                                        // must not cancel the re-arm after the write.
+                                        ServiceLocator.appScope.launch {
+                                            repo.setEnabled(r.id, !r.enabled)
+                                            reconcile()
+                                        }
                                     },
                                     onLongPress = {
-                                        lifecycleScope.launch { repo.delete(r.id) }
+                                        ServiceLocator.appScope.launch {
+                                            repo.delete(r.id)
+                                            reconcile()
+                                        }
                                     },
                                 )
                             )
@@ -85,12 +93,17 @@ class RemindersActivity : ComponentActivity() {
                 val label = pendingLabel ?: return
                 val hour = pendingHour
                 if (hour !in 0..23) return
-                lifecycleScope.launch {
+                ServiceLocator.appScope.launch {
                     repo.addRepeating(null, label, DAILY_MASK, LocalTime.of(hour, minute))
+                    reconcile()
                 }
             }
         }
     }
+
+    /** OS alarms are external state — every reminder mutation re-derives them. */
+    private suspend fun reconcile() =
+        ServiceLocator.reminderScheduler.reconcile(applicationContext)
 
     private companion object {
         const val RC_LABEL = 21

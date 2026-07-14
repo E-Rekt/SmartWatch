@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-feature android:name="android.hardware.type.watch" />
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <!-- allowBackup=false: a restored backup carrying stale clock-guard state onto
          a device with a wrong clock is exactly the confusion we defend against;
          the dataset is small enough to re-enter. Escape hatch: JsonDump. -->
@@ -29,5 +33,15 @@
             android:theme="@android:style/Theme.DeviceDefault" />
         <activity android:name=".ui.PickerActivity" android:exported="false"
             android:theme="@android:style/Theme.DeviceDefault" />
+
+        <receiver android:name=".alarm.AlarmReceiver" android:exported="false" />
+        <receiver android:name=".alarm.BootReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".timer.TimerService" android:exported="false" />
     </application>
 </manifest>

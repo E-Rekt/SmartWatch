@@ -3,6 +3,7 @@ package com.cztask
 import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.cztask.alarm.ReminderScheduler
 import com.cztask.data.db.AppDatabase
 import com.cztask.data.db.SeedCallback
 import com.cztask.data.repo.ReminderRepository
@@ -21,6 +22,13 @@ import java.io.File
 object ServiceLocator {
 
     private lateinit var appContext: Context
+
+    /** Process-lifetime scope for write+reconcile pipelines. NOT lifecycleScope:
+     *  a swipe-dismissed activity must not cancel the reconcile that re-arms OS
+     *  alarms after a DB write has already committed. */
+    val appScope = kotlinx.coroutines.CoroutineScope(
+        kotlinx.coroutines.SupervisorJob() + kotlinx.coroutines.Dispatchers.IO
+    )
 
     @Volatile var lastClockStatus: ClockStatus = ClockStatus.OK
         private set
@@ -71,6 +79,10 @@ object ServiceLocator {
         TimerPresetRepository(db.timerPresetDao())
     }
     val timerStateStore: TimerStateStore by lazy { TimerStateStore(appContext) }
+
+    val reminderScheduler: ReminderScheduler by lazy {
+        ReminderScheduler(reminderRepository, db.taskDao())
+    }
 
     val clockGuard: ClockGuard by lazy {
         val sp = appContext.getSharedPreferences("clock_guard", Context.MODE_PRIVATE)
