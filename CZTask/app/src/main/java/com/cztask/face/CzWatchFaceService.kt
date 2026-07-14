@@ -115,15 +115,30 @@ class CzWatchFaceService : CanvasWatchFaceService() {
             typeface = pixelFont
         }
 
-        private val secondTicker = Handler(Looper.getMainLooper())
-        private val secondTick = object : Runnable {
+        // Interactive-mode animation: 20 fps while the screen is actually on
+        // and interactive (seconds at a time on a watch — battery-cheap), dead
+        // stopped in ambient/invisible. One clock drives every animation.
+        private val animTicker = Handler(Looper.getMainLooper())
+        private var animRunning = false
+        private val animTick = object : Runnable {
             override fun run() {
-                if (!ambient && isVisible && runningTimer() != null) {
+                if (!ambient && isVisible) {
                     invalidate()
-                    secondTicker.postDelayed(this, 1000)
+                    animTicker.postDelayed(this, 50)
+                } else {
+                    animRunning = false
                 }
             }
         }
+
+        private fun startAnim() {
+            if (!animRunning && !ambient && isVisible) {
+                animRunning = true
+                animTicker.post(animTick)
+            }
+        }
+
+        private fun animT(): Float = (SystemClock.uptimeMillis() % 1_000_000L) / 1000f
 
         override fun onCreate(holder: SurfaceHolder) {
             super.onCreate(holder)
@@ -153,7 +168,7 @@ class CzWatchFaceService : CanvasWatchFaceService() {
             val aa = !(inAmbientMode && lowBit)
             timePaint.isAntiAlias = aa
             datePaint.isAntiAlias = aa
-            if (!inAmbientMode) secondTicker.post(secondTick)
+            if (!inAmbientMode) startAnim()
             invalidate()
         }
 
@@ -161,9 +176,10 @@ class CzWatchFaceService : CanvasWatchFaceService() {
             super.onVisibilityChanged(visible)
             if (visible) {
                 refreshData()
-                secondTicker.post(secondTick)
+                startAnim()
             } else {
-                secondTicker.removeCallbacks(secondTick)
+                animTicker.removeCallbacks(animTick)
+                animRunning = false
             }
         }
 
@@ -193,12 +209,16 @@ class CzWatchFaceService : CanvasWatchFaceService() {
             }
             timePaint.color = VALUE_WHITE
             datePaint.color = DATE_GRAY
+            val t = animT()
+            val timerLeft = runningTimer()?.let { it.endElapsedRealtimeMillis - SystemClock.elapsedRealtime() }
+            val panic = timerLeft != null && timerLeft in 1..PANIC_MS
 
-            drawChecker(canvas, bounds)
+            drawChecker(canvas, bounds, t, panic)
 
-            // --- HUD: TIME hero ---
+            // --- HUD: TIME hero (colon blinks at 1 Hz, like a console) ---
+            val timeText = now.format(timeFmt).let { if (t % 1f < 0.5f) it else it.replace(':', ' ') }
             drawHud(canvas, "TIME", cx, 92f)
-            drawShadowed(canvas, now.format(timeFmt), cx, 152f, timePaint)
+            drawShadowed(canvas, timeText, cx, 152f, timePaint)
             drawShadowed(canvas, now.format(dateFmt).uppercase(), cx, 190f, datePaint)
 
             // --- RINGS = open tasks ---
@@ -208,8 +228,8 @@ class CzWatchFaceService : CanvasWatchFaceService() {
                 val textW = countPaint.measureText(count)
                 val group = 30f + textW
                 val iconCx = cx - group / 2 + 11f
-                if (openTasks == 0) drawSparkle(canvas, iconCx, y - 9f)
-                else drawRing(canvas, iconCx, y - 9f)
+                if (openTasks == 0) drawSparkle(canvas, iconCx, y - 9f, t)
+                else drawRing(canvas, iconCx, y - 9f, t)
                 countPaint.color = if (openTasks == 0) RING_GOLD else VALUE_WHITE
                 drawShadowed(canvas, count, cx + group / 2 - textW / 2, y, countPaint)
                 y += 38f
@@ -266,22 +286,31 @@ class CzWatchFaceService : CanvasWatchFaceService() {
             canvas.drawText(text, x, y, paint)
         }
 
-        /** Gold ring with dark inner edge + specular glint, like the sprite. */
-        private fun drawRing(canvas: Canvas, cx: Float, cy: Float) {
+        /** Gold ring, spinning like the sprite: horizontal squash oscillation
+         *  reads as 3D rotation on a 20 px icon. */
+        private fun drawRing(canvas: Canvas, cx: Float, cy: Float, t: Float) {
+            val w = kotlin.math.abs(kotlin.math.cos(t * Math.PI.toFloat() / 0.6f))
+                .coerceAtLeast(0.22f) * 10f
+            val oval = RectF(cx - w, cy - 10f, cx + w, cy + 10f)
             iconPaint.style = Paint.Style.STROKE
             iconPaint.strokeWidth = 6f
             iconPaint.color = RING_GOLD_DARK
-            canvas.drawCircle(cx, cy, 10f, iconPaint)
+            canvas.drawOval(oval, iconPaint)
             iconPaint.strokeWidth = 4f
             iconPaint.color = RING_GOLD
-            canvas.drawCircle(cx, cy, 10f, iconPaint)
+            canvas.drawOval(oval, iconPaint)
             iconPaint.style = Paint.Style.FILL
             iconPaint.color = Color.WHITE
-            canvas.drawCircle(cx - 5f, cy - 6f, 1.8f, iconPaint)
+            canvas.drawCircle(cx - w * 0.5f, cy - 6f, 1.8f, iconPaint)
         }
 
-        /** Ring-collect sparkle: all tasks done = every ring collected. */
-        private fun drawSparkle(canvas: Canvas, cx: Float, cy: Float) {
+        /** Ring-collect sparkle: all tasks done = every ring collected.
+         *  Slow rotation + gentle scale pulse — celebratory, not busy. */
+        private fun drawSparkle(canvas: Canvas, cx: Float, cy: Float, t: Float) {
+            val pulse = 0.85f + 0.15f * kotlin.math.sin(t * 2f * Math.PI.toFloat() / 0.8f)
+            canvas.save()
+            canvas.rotate(t * 45f % 360f, cx, cy)
+            canvas.scale(pulse, pulse, cx, cy)
             iconPaint.style = Paint.Style.STROKE
             iconPaint.strokeWidth = 3f
             iconPaint.color = RING_GOLD
@@ -290,6 +319,7 @@ class CzWatchFaceService : CanvasWatchFaceService() {
             iconPaint.strokeWidth = 2f
             canvas.drawLine(cx - 6f, cy - 6f, cx + 6f, cy + 6f, iconPaint)
             canvas.drawLine(cx - 6f, cy + 6f, cx + 6f, cy - 6f, iconPaint)
+            canvas.restore()
         }
 
         /** Mini star post: gray pole, Sonic-blue ball. */
@@ -303,8 +333,10 @@ class CzWatchFaceService : CanvasWatchFaceService() {
             canvas.drawCircle(cx - 1.5f, cy - 9.5f, 1.2f, iconPaint)
         }
 
-        /** Green Hill footer, rendered once: grass lip + two-tone dirt checker. */
-        private fun drawChecker(canvas: Canvas, bounds: Rect) {
+        /** Green Hill footer: pre-rendered checker, scrolled like the level is
+         *  running by. Pattern period 32 px divides 416 exactly, so drawing the
+         *  bitmap twice tiles seamlessly. Timer panic = Sonic runs faster. */
+        private fun drawChecker(canvas: Canvas, bounds: Rect, t: Float, panic: Boolean) {
             val bmp = checkerBitmap ?: Bitmap.createBitmap(bounds.width(), 64, Bitmap.Config.ARGB_8888).also { b ->
                 val c = Canvas(b)
                 val p = Paint()
@@ -322,7 +354,11 @@ class CzWatchFaceService : CanvasWatchFaceService() {
                 c.drawRect(0f, 0f, bounds.width().toFloat(), 3f, p)
                 checkerBitmap = b
             }
-            canvas.drawBitmap(bmp, 0f, bounds.height() - 60f, null)
+            val speed = if (panic) 96f else 28f
+            val off = (t * speed) % 32f
+            val y = bounds.height() - 60f
+            canvas.drawBitmap(bmp, -off, y, null)
+            canvas.drawBitmap(bmp, bounds.width() - off, y, null)
         }
 
         private fun runningTimer(): TimerStateStore.RunningTimer? =
@@ -348,7 +384,7 @@ class CzWatchFaceService : CanvasWatchFaceService() {
         }
 
         override fun onDestroy() {
-            secondTicker.removeCallbacks(secondTick)
+            animTicker.removeCallbacks(animTick)
             super.onDestroy()
         }
     }
