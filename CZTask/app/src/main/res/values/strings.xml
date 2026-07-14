@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CZ Task</string>
+    <string name="menu_tasks">Tasks</string>
+    <string name="menu_reminders">Reminders</string>
+    <string name="menu_timers">Timers</string>
+    <string name="clock_warning">⚠ Check watch time</string>
+    <string name="add_task">+ Add task</string>
+    <string name="add_reminder">+ Daily reminder</string>
+    <string name="add_preset">+ Add timer</string>
+    <string name="input_task_label">New task</string>
+    <string name="input_reminder_label">Remind me to…</string>
+    <string name="pick_hour">Hour</string>
+    <string name="pick_minute">Minute</string>
+    <string name="pick_minutes_duration">Minutes</string>
+    <string name="timer_tap_to_cancel">running — tap to cancel</string>
+    <string name="empty_tasks">No tasks yet.\nTop button adds one.</string>
+    <string name="empty_reminders">No reminders yet.</string>
+</resources>

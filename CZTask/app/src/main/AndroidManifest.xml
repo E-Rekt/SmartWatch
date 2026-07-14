@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-feature android:name="android.hardware.type.watch" />
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- The Wear 2 watch face library acquires a wake lock in its tap-command
+         path (WatchFaceService$Engine.onCommand) — without this, tapping the
+         face kills the face process with a SecurityException. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- allowBackup=false: a restored backup carrying stale clock-guard state onto
+         a device with a wrong clock is exactly the confusion we defend against;
+         the dataset is small enough to re-enter. Escape hatch: JsonDump. -->
+    <application
+        android:name=".CzTaskApp"
+        android:allowBackup="false"
+        android:label="CZ Task">
+        <meta-data
+            android:name="com.google.android.wearable.standalone"
+            android:value="true" />
+
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.DeviceDefault">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.TasksActivity" android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity android:name=".ui.RemindersActivity" android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity android:name=".ui.TimersActivity" android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity android:name=".ui.PickerActivity" android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
+
+        <receiver android:name=".alarm.AlarmReceiver" android:exported="false" />
+        <receiver android:name=".alarm.BootReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".timer.TimerService" android:exported="false" />
+
+        <service
+            android:name=".face.CzWatchFaceService"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/watch_face" />
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview"
+                android:resource="@drawable/face_preview" />
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview_circular"
+                android:resource="@drawable/face_preview" />
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>
