@@ -28,6 +28,16 @@ interface TaskDao {
 
     /** Watch face / tile badge. */
     @Query("SELECT COUNT(*) FROM task WHERE done = 0") suspend fun openCount(): Int
+
+    @Query("SELECT * FROM task WHERE id = :id") suspend fun byId(id: Long): Task?
+
+    /** Featured-task fallback when nothing is pinned. */
+    @Query("SELECT * FROM task WHERE done = 0 ORDER BY created_at_utc_millis ASC LIMIT 1")
+    suspend fun oldestOpen(): Task?
+
+    /** NOT NOW: re-stamp sends the task to the back of the oldest-open queue. */
+    @Query("UPDATE task SET created_at_utc_millis = :now WHERE id = :id")
+    suspend fun touch(id: Long, now: Long)
 }
 
 @Dao

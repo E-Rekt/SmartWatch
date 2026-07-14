@@ -23,6 +23,11 @@ class TimerStateStore(context: Context) {
         val endElapsedRealtimeMillis: Long,
         val bootCount: Long,
         val startedWallUtcMillis: Long,  // display/debug only, never arithmetic
+        // Focus Act binding (Phase A): which task this timebox serves.
+        // Backward-compatible defaults — old records read as unbound timers.
+        val taskId: Long = -1L,
+        val label: String? = null,
+        val plannedSeconds: Int = 0,
     )
 
     /** Recovery outcome. LostToReboot is returned exactly once (the record
@@ -41,6 +46,9 @@ class TimerStateStore(context: Context) {
             .putLong(K_END_ELAPSED, t.endElapsedRealtimeMillis)
             .putLong(K_BOOT, t.bootCount)
             .putLong(K_STARTED_WALL, t.startedWallUtcMillis)
+            .putLong(K_TASK_ID, t.taskId)
+            .putString(K_LABEL, t.label)
+            .putInt(K_PLANNED_SECONDS, t.plannedSeconds)
             .commit()
     }
 
@@ -54,6 +62,9 @@ class TimerStateStore(context: Context) {
             endElapsedRealtimeMillis = end,
             bootCount = sp.getLong(K_BOOT, -1L),
             startedWallUtcMillis = sp.getLong(K_STARTED_WALL, 0L),
+            taskId = sp.getLong(K_TASK_ID, -1L),
+            label = sp.getString(K_LABEL, null),
+            plannedSeconds = sp.getInt(K_PLANNED_SECONDS, 0),
         )
         if (t.bootCount != currentBootCount) {
             clear()   // reported once: next call returns None
@@ -67,5 +78,8 @@ class TimerStateStore(context: Context) {
         const val K_END_ELAPSED = "end_elapsed_millis"
         const val K_BOOT = "boot_count"
         const val K_STARTED_WALL = "started_wall_utc"
+        const val K_TASK_ID = "task_id"
+        const val K_LABEL = "label"
+        const val K_PLANNED_SECONDS = "planned_seconds"
     }
 }

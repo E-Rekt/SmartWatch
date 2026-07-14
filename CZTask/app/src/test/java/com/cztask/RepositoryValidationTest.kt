@@ -32,6 +32,9 @@ private object ExplodingTaskDao : TaskDao {
     override suspend fun deleteDone() = error("unexpected")
     override suspend fun title(id: Long): String? = error("unexpected")
     override suspend fun openCount(): Int = error("unexpected")
+    override suspend fun byId(id: Long): Task? = error("unexpected")
+    override suspend fun oldestOpen(): Task? = error("unexpected")
+    override suspend fun touch(id: Long, now: Long) = error("unexpected")
 }
 
 private object ExplodingReminderDao : ReminderDao {

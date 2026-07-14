@@ -4,8 +4,11 @@
     <string name="quick_task_label">Quick Task</string>
     <string name="quick_task_added">✓ %s</string>
     <string name="menu_tasks">Tasks</string>
-    <string name="menu_reminders">Reminders</string>
+    <string name="menu_reminders">Checkpoints</string>
     <string name="menu_timers">Timers</string>
+    <string name="arm_pin">★ PIN</string>
+    <string name="arm_delete">DELETE?</string>
+    <string name="hold_to_stop">HOLD TO STOP</string>
     <string name="clock_warning">⚠ Check watch time</string>
     <string name="add_task">+ Add task</string>
     <string name="add_reminder">+ Daily reminder</string>

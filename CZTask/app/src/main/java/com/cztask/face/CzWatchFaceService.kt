@@ -74,7 +74,9 @@ class CzWatchFaceService : CanvasWatchFaceService() {
         private var burnIn = false
 
         @Volatile private var checkpointLine: String? = null
+        @Volatile private var checkpointUrgent: Boolean = false
         @Volatile private var openTasks: Int = -1
+        @Volatile private var oneThingLine: String? = null
 
         private val timeFmt = DateTimeFormatter.ofPattern("HH:mm")
         private val dateFmt = DateTimeFormatter.ofPattern("EEE d MMM")
@@ -105,6 +107,12 @@ class CzWatchFaceService : CanvasWatchFaceService() {
             strokeWidth = 10f; color = TRACK_GOLD
         }
         private val arcRect = RectF(14f, 14f, 402f, 402f)
+        // Ambient HUD: outline-only, thin, gray — burn-in-safe by construction.
+        private val ambientArcPaint = Paint().apply {
+            isAntiAlias = true; style = Paint.Style.STROKE
+            strokeWidth = 3f; color = AMBIENT_GRAY
+        }
+        private val ambientLinePaint = pxPaint(16f).apply { color = 0xFF606060.toInt() }
 
         private var checkerBitmap: Bitmap? = null
 
@@ -186,8 +194,12 @@ class CzWatchFaceService : CanvasWatchFaceService() {
         override fun onTapCommand(tapType: Int, x: Int, y: Int, eventTime: Long) {
             android.util.Log.i("CZTASK_FACE", "tap type=$tapType x=$x y=$y")
             if (tapType == TAP_TYPE_TAP && y > 200) {
+                // State-routed: timer running -> Timers; otherwise -> NOW.
+                val target = if (runningTimer() != null)
+                    com.cztask.ui.TimersActivity::class.java
+                else MainActivity::class.java
                 startActivity(
-                    Intent(this@CzWatchFaceService, MainActivity::class.java)
+                    Intent(this@CzWatchFaceService, target)
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 )
             }
@@ -199,12 +211,31 @@ class CzWatchFaceService : CanvasWatchFaceService() {
             val now = ZonedDateTime.now()
 
             if (ambient) {
-                // Burn-in jitter: nudge the cluster a few px on a minute cycle.
+                // Ambient HUD (Phase A1): the time-blindness aids stay visible
+                // while the screen is dim — the watch lives here ~95% of the
+                // time. Whole minutes only (ambient ticks once/min; frozen
+                // seconds would be a lie). Everything under the burn-in jitter.
                 val j = if (burnIn) ((now.minute % 3) - 1) * 4f else 0f
                 timePaint.color = AMBIENT_GRAY
                 canvas.drawText(now.format(timeFmt), cx + j, 160f + j, timePaint)
                 datePaint.color = 0xFF606060.toInt()
                 canvas.drawText(now.format(dateFmt).uppercase(), cx + j, 196f + j, datePaint)
+
+                runningTimer()?.let { t ->
+                    val left = t.endElapsedRealtimeMillis - SystemClock.elapsedRealtime()
+                    if (left > 0) {
+                        val ranSoFar = (System.currentTimeMillis() - t.startedWallUtcMillis).coerceAtLeast(0)
+                        val total = (left + ranSoFar).coerceAtLeast(1)
+                        val sweep = 360f * (left.toFloat() / total.toFloat()).coerceIn(0f, 1f)
+                        arcRect.offset(j, j)
+                        canvas.drawArc(arcRect, -90f, sweep, false, ambientArcPaint)
+                        arcRect.offset(-j, -j)
+                        val min = (left + 59_999) / 60_000
+                        canvas.drawText("$min MIN", cx + j, 236f + j, ambientLinePaint)
+                    }
+                }
+                oneThingLine?.let { canvas.drawText(it, cx + j, 272f + j, ambientLinePaint) }
+                checkpointLine?.let { canvas.drawText(it, cx + j, 306f + j, ambientLinePaint) }
                 return
             }
             timePaint.color = VALUE_WHITE
@@ -220,6 +251,14 @@ class CzWatchFaceService : CanvasWatchFaceService() {
             drawHud(canvas, "TIME", cx, 92f)
             drawShadowed(canvas, timeText, cx, 152f, timePaint)
             drawShadowed(canvas, now.format(dateFmt).uppercase(), cx, 190f, datePaint)
+            if (ServiceLocator.lastClockStatus != com.cztask.data.time.ClockStatus.OK) {
+                // Clock-guard tripwire: the lived 15-month incident, kept visible.
+                shadowPaint.textSize = 16f
+                canvas.drawText("!", cx + 118f, 192f, shadowPaint)
+                ambientLinePaint.color = PANIC_RED
+                canvas.drawText("!", cx + 116f, 190f, ambientLinePaint)
+                ambientLinePaint.color = 0xFF606060.toInt()
+            }
 
             // --- RINGS = open tasks ---
             var y = 240f
@@ -235,12 +274,22 @@ class CzWatchFaceService : CanvasWatchFaceService() {
                 y += 38f
             }
 
-            // --- checkpoint = next reminder ---
+            // --- the ONE Thing: today's pinned/featured task, always visible ---
+            oneThingLine?.let { line ->
+                rowPaint.color = RING_GOLD
+                drawShadowed(canvas, line, cx, y, rowPaint)
+                rowPaint.color = VALUE_WHITE
+                y += 34f
+            }
+
+            // --- checkpoint = next reminder (white + relative when <=20 min) ---
             checkpointLine?.let { line ->
                 val textW = rowPaint.measureText(line)
                 val group = 22f + textW
                 drawStarPost(canvas, cx - group / 2 + 6f, y - 7f)
+                rowPaint.color = if (checkpointUrgent) VALUE_WHITE else DATE_GRAY
                 drawShadowed(canvas, line, cx + group / 2 - textW / 2, y, rowPaint)
+                rowPaint.color = VALUE_WHITE
                 y += 36f
             }
 
@@ -367,18 +416,33 @@ class CzWatchFaceService : CanvasWatchFaceService() {
 
         private fun refreshData() {
             ServiceLocator.appScope.launch {
+                val nowMs = SystemTimeSource.nowUtcMillis()
                 val plan = ServiceLocator.reminderRepository.schedulePlan()
+                var urgent = false
                 val next = plan.nextFireAtUtcMillis?.let { at ->
                     val r = plan.reminderIdsAtNextFire.firstOrNull()
                         ?.let { ServiceLocator.reminderRepository.byId(it) }
                     val label = (r?.taskId?.let { ServiceLocator.db.taskDao().title(it) }
                         ?: r?.label.orEmpty()).uppercase().take(12)
-                    val zdt = Instant.ofEpochMilli(at).atZone(SystemTimeSource.zone())
-                    "%02d:%02d %s".format(zdt.hour, zdt.minute, label)
+                    val minAway = (at - nowMs) / 60_000
+                    if (minAway in 0..20) {
+                        // Anti-time-blindness: near checkpoints become relative
+                        // and bright — "IN 12 MIN" hits harder than "08:00".
+                        urgent = true
+                        "IN $minAway MIN $label"
+                    } else {
+                        val zdt = Instant.ofEpochMilli(at).atZone(SystemTimeSource.zone())
+                        "%02d:%02d %s".format(zdt.hour, zdt.minute, label)
+                    }
                 }
                 val open = ServiceLocator.db.taskDao().openCount()
+                val (featured, pinned) = ServiceLocator.taskRepository.featured()
                 checkpointLine = next
+                checkpointUrgent = urgent
                 openTasks = open
+                oneThingLine = featured?.let {
+                    (if (pinned) "★ " else "") + it.title.uppercase().take(12)
+                }
                 invalidate()
             }
         }

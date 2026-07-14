@@ -31,6 +31,12 @@ sealed interface Row {
         val onTap: (() -> Unit)? = null,
         val onLongPress: (() -> Unit)? = null,
     ) : Row
+
+    /** NOW hero card; bind configures the NowCardView on (re)bind. */
+    data class Hero(val bind: (NowCardView) -> Unit) : Row
+
+    /** Long-press arm state: ★ PIN | DELETE? with activity-managed revert. */
+    data class Armed(val onPin: () -> Unit, val onDelete: () -> Unit) : Row
 }
 
 class RowAdapter : RecyclerView.Adapter<RowAdapter.Holder>() {
@@ -49,6 +55,8 @@ class RowAdapter : RecyclerView.Adapter<RowAdapter.Holder>() {
     override fun getItemViewType(position: Int) = when (rows[position]) {
         is Row.Center -> R.layout.row_center_text
         is Row.Item -> R.layout.row_two_line
+        is Row.Hero -> R.layout.row_hero
+        is Row.Armed -> R.layout.row_armed
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder =
@@ -58,6 +66,13 @@ class RowAdapter : RecyclerView.Adapter<RowAdapter.Holder>() {
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         when (val row = rows[position]) {
+            is Row.Hero -> row.bind(holder.itemView.findViewById(R.id.hero))
+            is Row.Armed -> {
+                holder.itemView.findViewById<TextView>(R.id.arm_pin)
+                    .setOnClickListener { row.onPin() }
+                holder.itemView.findViewById<TextView>(R.id.arm_delete)
+                    .setOnClickListener { row.onDelete() }
+            }
             is Row.Center -> {
                 val tv = holder.itemView.findViewById<TextView>(R.id.text)
                 tv.text = row.text
@@ -86,12 +101,16 @@ class RowAdapter : RecyclerView.Adapter<RowAdapter.Holder>() {
     }
 }
 
-/** Curved, centered, crown-focused list — the standard screen body. */
-fun Activity.setUpWearList(): RowAdapter {
+/** Curved, centered, crown-focused list — the standard screen body.
+ *  centering=false for hero-first screens (the hero must sit at the top,
+ *  not be curved off-axis). */
+fun Activity.setUpWearList(centering: Boolean = true): RowAdapter {
     setContentView(R.layout.activity_list)
     val list = findViewById<WearableRecyclerView>(R.id.list)
-    list.layoutManager = WearableLinearLayoutManager(this)
-    list.isEdgeItemsCenteringEnabled = true
+    list.layoutManager =
+        if (centering) WearableLinearLayoutManager(this)
+        else androidx.recyclerview.widget.LinearLayoutManager(this)
+    list.isEdgeItemsCenteringEnabled = centering
     val adapter = RowAdapter()
     list.adapter = adapter
     // Rotary events go to the FOCUSED view (measured in CZProbe).
