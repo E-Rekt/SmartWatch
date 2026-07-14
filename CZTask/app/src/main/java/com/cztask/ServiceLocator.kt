@@ -69,8 +69,12 @@ object ServiceLocator {
 
     private val time = SystemTimeSource
 
+    val pinStore: com.cztask.data.time.PinStore by lazy {
+        com.cztask.data.time.PinStore(appContext)
+    }
+
     val taskRepository: TaskRepository by lazy {
-        TaskRepository(db.taskDao(), db.reminderDao(), time)
+        TaskRepository(db.taskDao(), db.reminderDao(), time, pinStore)
     }
     val reminderRepository: ReminderRepository by lazy {
         ReminderRepository(db.reminderDao(), time)

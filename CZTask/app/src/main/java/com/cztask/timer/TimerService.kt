@@ -29,6 +29,11 @@ class TimerService : Service() {
 
     private val handler = Handler(Looper.getMainLooper())
     private var endElapsed = 0L
+    private var taskLabel: String? = null
+
+    /** "12:34 · WRITE REPORT" when the act is bound to a task. */
+    private fun statusText(leftMs: Long): String =
+        taskLabel?.let { "${format(leftMs)} · ${it.take(16).uppercase()}" } ?: format(leftMs)
 
     private val tick = object : Runnable {
         override fun run() {
@@ -37,7 +42,7 @@ class TimerService : Service() {
                 finishTimer()
             } else {
                 getSystemService(android.app.NotificationManager::class.java)
-                    .notify(Ids.NOTIF_TIMER_RUNNING, Notifications.timerRunning(this@TimerService, format(left)))
+                    .notify(Ids.NOTIF_TIMER_RUNNING, Notifications.timerRunning(this@TimerService, statusText(left)))
                 handler.postDelayed(this, 1000)
             }
         }
@@ -46,15 +51,20 @@ class TimerService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_START -> {
-                val durationMs = intent.getIntExtra(EXTRA_DURATION_SECONDS, 0) * 1000L
+                val durationSec = intent.getIntExtra(EXTRA_DURATION_SECONDS, 0)
+                val durationMs = durationSec * 1000L
                 if (durationMs <= 0) { stopSelf(); return START_NOT_STICKY }
                 endElapsed = SystemClock.elapsedRealtime() + durationMs
+                taskLabel = intent.getStringExtra(EXTRA_TASK_LABEL)
                 ServiceLocator.timerStateStore.save(
                     TimerStateStore.RunningTimer(
                         presetId = intent.getLongExtra(EXTRA_PRESET_ID, -1L),
                         endElapsedRealtimeMillis = endElapsed,
                         bootCount = systemBootCount(this),
                         startedWallUtcMillis = System.currentTimeMillis(),
+                        taskId = intent.getLongExtra(EXTRA_TASK_ID, -1L),
+                        label = taskLabel,
+                        plannedSeconds = durationSec,
                     )
                 )
                 // Accepted limitation: allowWhileIdle shares a per-app dispatch
@@ -64,7 +74,7 @@ class TimerService : Service() {
                 // setAlarmClock() if late buzzes are ever observed in practice.
                 getSystemService(AlarmManager::class.java).setExactAndAllowWhileIdle(
                     AlarmManager.ELAPSED_REALTIME_WAKEUP, endElapsed, backupAlarm())
-                startForeground(Ids.NOTIF_TIMER_RUNNING, Notifications.timerRunning(this, format(durationMs)))
+                startForeground(Ids.NOTIF_TIMER_RUNNING, Notifications.timerRunning(this, statusText(durationMs)))
                 handler.removeCallbacks(tick)
                 handler.postDelayed(tick, 1000)
             }
@@ -112,13 +122,23 @@ class TimerService : Service() {
         const val ACTION_CANCEL = "com.cztask.timer.CANCEL"
         const val EXTRA_DURATION_SECONDS = "duration_seconds"
         const val EXTRA_PRESET_ID = "preset_id"
+        const val EXTRA_TASK_ID = "task_id"
+        const val EXTRA_TASK_LABEL = "task_label"
 
-        fun start(context: Context, presetId: Long, durationSeconds: Int) {
+        fun start(
+            context: Context,
+            presetId: Long,
+            durationSeconds: Int,
+            taskId: Long = -1L,
+            taskLabel: String? = null,
+        ) {
             context.startService(
                 Intent(context, TimerService::class.java)
                     .setAction(ACTION_START)
                     .putExtra(EXTRA_PRESET_ID, presetId)
                     .putExtra(EXTRA_DURATION_SECONDS, durationSeconds)
+                    .putExtra(EXTRA_TASK_ID, taskId)
+                    .putExtra(EXTRA_TASK_LABEL, taskLabel)
             )
         }
 

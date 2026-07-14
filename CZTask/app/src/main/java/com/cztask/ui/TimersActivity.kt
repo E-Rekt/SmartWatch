@@ -21,6 +21,7 @@ class TimersActivity : ComponentActivity() {
     private val repo get() = ServiceLocator.timerPresetRepository
     private lateinit var adapter: RowAdapter
     private var presets: List<TimerPreset> = emptyList()
+    private var stopHintUntil = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,9 +58,17 @@ class TimersActivity : ComponentActivity() {
                 if (left > 0) add(
                     Row.Item(
                         glyph = "■",
-                        title = TimerService.format(left),
-                        subtitle = getString(R.string.timer_tap_to_cancel),
-                        onTap = { TimerService.cancel(this@TimersActivity); render() },
+                        title = TimerService.format(left) +
+                            (t.label?.let { " · ${it.take(10).uppercase()}" } ?: ""),
+                        // Timebox protection (A5): a running act must not die to
+                        // a sleeve tap. Tap only hints; HOLD stops.
+                        subtitle = if (stopHintUntil > SystemClock.elapsedRealtime())
+                            getString(R.string.hold_to_stop) else null,
+                        onTap = {
+                            stopHintUntil = SystemClock.elapsedRealtime() + 1500
+                            render()
+                        },
+                        onLongPress = { TimerService.cancel(this@TimersActivity); render() },
                     )
                 )
             }

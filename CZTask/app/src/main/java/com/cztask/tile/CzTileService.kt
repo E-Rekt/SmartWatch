@@ -51,6 +51,10 @@ class CzTileService : TileService() {
             ServiceLocator.appScope.launch {
                 try {
                     val open = ServiceLocator.db.taskDao().openCount()
+                    val (featured, pinned) = ServiceLocator.taskRepository.featured()
+                    val oneThing = featured?.let {
+                        (if (pinned) "★ " else "") + it.title.take(16).uppercase()
+                    }
                     val plan = ServiceLocator.reminderRepository.schedulePlan()
                     val next = plan.nextFireAtUtcMillis?.let { at ->
                         val r = plan.reminderIdsAtNextFire.firstOrNull()
@@ -67,7 +71,7 @@ class CzTileService : TileService() {
                             .setTimeline(
                                 Timeline.Builder().addTimelineEntry(
                                     TimelineEntry.Builder()
-                                        .setLayout(Layout.Builder().setRoot(layout(open, next)).build())
+                                        .setLayout(Layout.Builder().setRoot(layout(open, oneThing, next)).build())
                                         .build()
                                 ).build()
                             )
@@ -86,12 +90,14 @@ class CzTileService : TileService() {
             "CzTileResources"
         }
 
-    private fun layout(open: Int, next: String?): LayoutElement =
+    private fun layout(open: Int, oneThing: String?, next: String?): LayoutElement =
         Column.Builder()
             .addContent(text("CZ TASK", 14f, GOLD))
             .addContent(Spacer.Builder().setHeight(dp(6f)).build())
             .addContent(text(if (open == 0) "ALL CLEAR" else "$open TASKS", 26f, WHITE))
-            .addContent(Spacer.Builder().setHeight(dp(6f)).build())
+            .addContent(Spacer.Builder().setHeight(dp(4f)).build())
+            .addContent(text(oneThing ?: "—", 16f, if (oneThing != null) GOLD else GRAY))
+            .addContent(Spacer.Builder().setHeight(dp(4f)).build())
             .addContent(text(next ?: "no checkpoint", 15f, if (next != null) WHITE else GRAY))
             .addContent(Spacer.Builder().setHeight(dp(14f)).build())
             .addContent(

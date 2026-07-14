@@ -23,8 +23,36 @@ class TaskRepository(
     private val tasks: TaskDao,
     private val reminders: ReminderDao,
     private val time: TimeSource,
+    private val pins: com.cztask.data.time.PinStore? = null,
 ) {
     fun observeAll(): Flow<List<Task>> = tasks.observeAll()
+
+    /** The ONE Thing, resolved: today's pin if it still points at an open
+     *  task (stale/done/deleted pins self-clear), else the oldest open task.
+     *  Second of the pair reports whether the task is actually pinned. */
+    suspend fun featured(): Pair<Task?, Boolean> {
+        val today = java.time.Instant.ofEpochMilli(time.nowUtcMillis())
+            .atZone(time.zone()).toLocalDate().toEpochDay()
+        pins?.pinnedId(today)?.let { id ->
+            val t = tasks.byId(id)
+            if (t != null && !t.done) return t to true
+            pins.clear()
+        }
+        return tasks.oldestOpen() to false
+    }
+
+    suspend fun pin(taskId: Long) {
+        val today = java.time.Instant.ofEpochMilli(time.nowUtcMillis())
+            .atZone(time.zone()).toLocalDate().toEpochDay()
+        pins?.pin(taskId, today)
+    }
+
+    fun unpin() = pins?.clear()
+
+    /** NOT NOW: pinned task -> unpin; unpinned -> back of the queue. */
+    suspend fun notNow(taskId: Long, wasPinned: Boolean) {
+        if (wasPinned) pins?.clear() else tasks.touch(taskId, time.nowUtcMillis())
+    }
 
     suspend fun add(title: String, source: Int = Task.SOURCE_MANUAL): Long {
         val t = title.trim()
