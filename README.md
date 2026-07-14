@@ -27,10 +27,15 @@ Kotlin, JVM target 17.
 
 1. **Toolchain + hardware probe** — [`CZProbe/`](CZProbe/) ✅ done, findings in [`docs/probe-results.md`](docs/probe-results.md)
 2. Room schema (Task / Reminder / TimerPreset) + repository ✅ done — [`CZTask/`](CZTask/), design in [`docs/data-layer-design.md`](docs/data-layer-design.md); time-sync solved ([`docs/time-sync.md`](docs/time-sync.md))
-3. **Views** shell (Compose ruled out by measured lowRamDevice/96 MB heap), benchmarked on-device immediately ← current step
-4. Alarm + notification layer (reminders and timers share it)
-5. Voice quick-capture + stem-button bindings
-6. Tile + complication
+3. **Views** shell ✅ done — 786 ms cold start, ~29 MB PSS on-device (Compose ruled out by measured lowRamDevice/96 MB heap)
+4. Alarm + notification layer ✅ done — mutex-serialized reconcile, coalesced RTC alarm, boot/TZ/TIME_SET handling per the measured broadcast matrix, elapsed-axis timer engine; reboot-tested
+5. Voice quick-capture + stem bindings ✅ done — `QuickTaskActivity` (launcher-visible for hardware-button binding), STEM_1 in-app
+6. Tile ✅ done — third-party tiles verified supported on this 2.66 home; `CzTileService` (complication skipped: no host faces remain on the debloated watch)
+
+**Beyond the plan:** reversible 21-package debloat, boot-launch into CZTask, and the
+**"Green Hill Time"** Sonic-HUD watch face (`face/CzWatchFaceService.kt`) — time/date,
+RINGS = open tasks, star-post checkpoint = next reminder, depleting gold bezel ring =
+running timer, Press Start 2P (OFL).
 
 ## CZProbe (step 1)
 
