@@ -62,6 +62,19 @@
         <service android:name=".timer.TimerService" android:exported="false" />
 
         <service
+            android:name=".tile.CzTileService"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
+            <intent-filter>
+                <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />
+            </intent-filter>
+            <meta-data
+                android:name="androidx.wear.tiles.PREVIEW"
+                android:resource="@drawable/face_preview" />
+        </service>
+
+        <service
             android:name=".face.CzWatchFaceService"
             android:exported="true"
             android:label="@string/app_name"

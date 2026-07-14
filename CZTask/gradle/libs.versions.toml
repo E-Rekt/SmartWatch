@@ -11,6 +11,8 @@ recyclerview = "1.3.2"
 wear = "1.3.0"
 wearInput = "1.1.0"
 wearableSupport = "2.9.0"
+wearTiles = "1.1.0"
+concurrentFutures = "1.1.0"
 junit4 = "4.13.2"
 androidxTestRunner = "1.5.2"
 androidxTestCore = "1.5.0"
@@ -25,6 +27,8 @@ wear = { module = "androidx.wear:wear", version.ref = "wear" }
 wear-input = { module = "androidx.wear:wear-input", version.ref = "wearInput" }
 wearable-support = { module = "com.google.android.support:wearable", version.ref = "wearableSupport" }
 wearable-platform = { module = "com.google.android.wearable:wearable", version.ref = "wearableSupport" }
+wear-tiles = { module = "androidx.wear.tiles:tiles", version.ref = "wearTiles" }
+concurrent-futures = { module = "androidx.concurrent:concurrent-futures-ktx", version.ref = "concurrentFutures" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }

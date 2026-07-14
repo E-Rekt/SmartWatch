@@ -49,6 +49,11 @@ dependencies {
     // watchface library targets Wear 3; this is the proven path on API 28.
     implementation(libs.wearable.support)
     compileOnly(libs.wearable.platform)
+    // Tiles v1 schema — pre-protolayout artifact; the renderer in this watch's
+    // 2.66 home binds androidx.wear.tiles.action.BIND_TILE_PROVIDER (verified:
+    // Spotify's tiles resolve on-device).
+    implementation(libs.wear.tiles)
+    implementation(libs.concurrent.futures)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     implementation(libs.coroutines.android)
