@@ -9,6 +9,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.cztask.R
 import com.cztask.ServiceLocator
 import com.cztask.data.time.SystemTimeSource
+import java.time.LocalDate
 import java.time.LocalTime
 import kotlinx.coroutines.launch
 
@@ -17,9 +18,10 @@ class RemindersActivity : ComponentActivity() {
     private val repo get() = ServiceLocator.reminderRepository
     private lateinit var adapter: RowAdapter
 
-    // Three-step add flow (label -> hour -> minute); pending state is fine to
-    // lose on process death mid-flow.
+    // Four-step add flow (label -> repeat -> hour -> minute); pending state is
+    // fine to lose on process death mid-flow.
     private var pendingLabel: String? = null
+    private var pendingRepeat: Int = REPEAT_DAILY
     private var pendingHour: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +75,16 @@ class RemindersActivity : ComponentActivity() {
             RC_LABEL -> {
                 pendingLabel = textInputResult(data) ?: return
                 startActivityForResult(
+                    PickerActivity.intent(
+                        this, getString(R.string.pick_repeat), intArrayOf(0, 1, 2, 3, 4),
+                        arrayOf("Daily", "Weekdays", "Weekends", "Today", "Tomorrow"),
+                    ),
+                    RC_REPEAT,
+                )
+            }
+            RC_REPEAT -> {
+                pendingRepeat = PickerActivity.result(data) ?: return
+                startActivityForResult(
                     PickerActivity.intent(this, getString(R.string.pick_hour), IntArray(24) { it }),
                     RC_HOUR,
                 )
@@ -93,8 +105,16 @@ class RemindersActivity : ComponentActivity() {
                 val label = pendingLabel ?: return
                 val hour = pendingHour
                 if (hour !in 0..23) return
+                val repeat = pendingRepeat
+                val at = LocalTime.of(hour, minute)
                 ServiceLocator.appScope.launch {
-                    repo.addRepeating(null, label, DAILY_MASK, LocalTime.of(hour, minute))
+                    when (repeat) {
+                        REPEAT_DAILY -> repo.addRepeating(null, label, DAILY_MASK, at)
+                        REPEAT_WEEKDAYS -> repo.addRepeating(null, label, WEEKDAY_MASK, at)
+                        REPEAT_WEEKENDS -> repo.addRepeating(null, label, WEEKEND_MASK, at)
+                        REPEAT_TODAY -> repo.addOneShot(null, label, LocalDate.now(), at)
+                        REPEAT_TOMORROW -> repo.addOneShot(null, label, LocalDate.now().plusDays(1), at)
+                    }
                     reconcile()
                 }
             }
@@ -109,6 +129,14 @@ class RemindersActivity : ComponentActivity() {
         const val RC_LABEL = 21
         const val RC_HOUR = 22
         const val RC_MINUTE = 23
+        const val RC_REPEAT = 24
         const val DAILY_MASK = 0b1111111
+        const val WEEKDAY_MASK = 0b0011111   // bit0=Mon … bit6=Sun
+        const val WEEKEND_MASK = 0b1100000
+        const val REPEAT_DAILY = 0
+        const val REPEAT_WEEKDAYS = 1
+        const val REPEAT_WEEKENDS = 2
+        const val REPEAT_TODAY = 3
+        const val REPEAT_TOMORROW = 4
     }
 }

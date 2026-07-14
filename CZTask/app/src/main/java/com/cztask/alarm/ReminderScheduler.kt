@@ -58,6 +58,11 @@ class ReminderScheduler(
             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, pi)
         }
         armDailyBackstop(context)
+        // Keep the tile in sync — reconcile already runs after every mutation.
+        runCatching {
+            androidx.wear.tiles.TileService.getUpdater(context)
+                .requestUpdate(com.cztask.tile.CzTileService::class.java)
+        }
         Log.i(TAG, "reconcile: fired=$firedCount next=${plan.nextFireAtUtcMillis} ids=${plan.reminderIdsAtNextFire}")
     }
 

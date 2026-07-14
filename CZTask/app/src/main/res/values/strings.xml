@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CZ Task</string>
+    <string name="quick_task_label">Quick Task</string>
+    <string name="quick_task_added">✓ %s</string>
     <string name="menu_tasks">Tasks</string>
     <string name="menu_reminders">Reminders</string>
     <string name="menu_timers">Timers</string>
@@ -11,6 +13,7 @@
     <string name="input_task_label">New task</string>
     <string name="input_reminder_label">Remind me to…</string>
     <string name="pick_hour">Hour</string>
+    <string name="pick_repeat">Repeat</string>
     <string name="pick_minute">Minute</string>
     <string name="pick_minutes_duration">Minutes</string>
     <string name="timer_tap_to_cancel">running — tap to cancel</string>

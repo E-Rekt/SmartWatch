@@ -50,8 +50,9 @@ class MainActivity : ComponentActivity() {
     private fun open(cls: Class<*>) = startActivity(Intent(this, cls))
 
     // Measured stem mapping (CZProbe): top pusher = STEM_1, bottom = STEM_2.
+    // Top = capture a thought instantly; bottom = timers.
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean = when (keyCode) {
-        KeyEvent.KEYCODE_STEM_1 -> { open(TasksActivity::class.java); true }
+        KeyEvent.KEYCODE_STEM_1 -> { open(QuickTaskActivity::class.java); true }
         KeyEvent.KEYCODE_STEM_2 -> { open(TimersActivity::class.java); true }
         else -> super.onKeyDown(keyCode, event)
     }

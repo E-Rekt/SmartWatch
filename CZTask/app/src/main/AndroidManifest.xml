@@ -29,6 +29,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- Launcher-visible so Wear 2 hardware-button customization can bind a
+             pusher directly to capture. Translucent: it only hosts the input flow. -->
+        <activity
+            android:name=".ui.QuickTaskActivity"
+            android:exported="true"
+            android:label="@string/quick_task_label"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".ui.TasksActivity" android:exported="false"
             android:theme="@android:style/Theme.DeviceDefault" />
         <activity android:name=".ui.RemindersActivity" android:exported="false"
@@ -47,6 +60,19 @@
         </receiver>
 
         <service android:name=".timer.TimerService" android:exported="false" />
+
+        <service
+            android:name=".tile.CzTileService"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
+            <intent-filter>
+                <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />
+            </intent-filter>
+            <meta-data
+                android:name="androidx.wear.tiles.PREVIEW"
+                android:resource="@drawable/face_preview" />
+        </service>
 
         <service
             android:name=".face.CzWatchFaceService"
