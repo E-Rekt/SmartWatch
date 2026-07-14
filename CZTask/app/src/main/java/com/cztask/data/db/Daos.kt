@@ -25,6 +25,9 @@ interface TaskDao {
 
     /** Notification content for a task-linked reminder. */
     @Query("SELECT title FROM task WHERE id = :id") suspend fun title(id: Long): String?
+
+    /** Watch face / tile badge. */
+    @Query("SELECT COUNT(*) FROM task WHERE done = 0") suspend fun openCount(): Int
 }
 
 @Dao

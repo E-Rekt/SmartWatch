@@ -45,6 +45,10 @@ dependencies {
     implementation(libs.recyclerview)
     implementation(libs.wear)
     implementation(libs.wear.input)
+    // Classic Wear OS 2 watch face API (CanvasWatchFaceService) — the androidx
+    // watchface library targets Wear 3; this is the proven path on API 28.
+    implementation(libs.wearable.support)
+    compileOnly(libs.wearable.platform)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     implementation(libs.coroutines.android)

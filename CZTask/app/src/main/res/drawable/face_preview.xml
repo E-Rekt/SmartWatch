@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Picker preview: black disc, big "time" bar, accent reminder bar. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp" android:height="320dp"
+    android:viewportWidth="320" android:viewportHeight="320">
+    <path android:fillColor="#000000"
+        android:pathData="M160,0 A160,160 0 1,0 160,320 A160,160 0 1,0 160,0 Z" />
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M85,95 h150 v42 h-150 Z" />
+    <path android:fillColor="#9E9E9E"
+        android:pathData="M120,150 h80 v10 h-80 Z" />
+    <path android:fillColor="#64B5F6"
+        android:pathData="M95,185 h130 v14 h-130 Z" />
+    <path android:fillColor="#9E9E9E"
+        android:pathData="M120,215 h80 v10 h-80 Z" />
+</vector>
